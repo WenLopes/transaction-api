@@ -123,6 +123,8 @@ return [
     'uuid' => 'The :attribute must be a valid UUID.',
     // Custom validations:
     'user_active' => 'The :attribute is not active',
+    'not_seller' => 'The :attribute cannot be a seller',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
