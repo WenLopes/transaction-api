@@ -22,4 +22,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
     {
         $this->model = $model;
     }
+
+    /**
+     * Find user active by id.
+     *
+     * @param int $user
+     * @param array $columns
+     * @param array $relations
+     * @return User
+     */
+    public function findById(
+        int $modelId,
+        array $columns = ['*'],
+        array $relations = []
+    ): ?Model {
+        return $this->model->select($columns)->with($relations)->active()->find($modelId);
+    }
 }

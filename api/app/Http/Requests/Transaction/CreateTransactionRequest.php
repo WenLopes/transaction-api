@@ -34,7 +34,7 @@ class CreateTransactionRequest extends BaseFormRequest
             'payer' => [
                 'required',
                 'integer',
-                'exists:users,id'
+                'user_active'
             ],
             'payee' => [
                 'required',

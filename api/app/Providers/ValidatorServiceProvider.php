@@ -24,6 +24,6 @@ class ValidatorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Validator::extend('user_active', 'App\Http\Validators\UserActive@passes');
     }
 }
