@@ -2,7 +2,7 @@
 
 namespace App\Models\Notification;
 
-trait NotificationRelationships {
+trait NotificationRelations {
 
     public function status()
     {

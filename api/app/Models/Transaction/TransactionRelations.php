@@ -2,7 +2,7 @@
 
 namespace App\Models\Transaction;
 
-trait TransactionRelationships {
+trait TransactionRelations {
 
     public function payer()
     {

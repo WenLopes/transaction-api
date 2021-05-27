@@ -2,7 +2,7 @@
 
 namespace App\Models\User;
 
-trait UserRelationships {
+trait UserRelations {
 
     public function paid_transactions()
     {
