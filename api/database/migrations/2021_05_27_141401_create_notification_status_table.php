@@ -14,7 +14,8 @@ class CreateNotificationStatusTable extends Migration
     public function up()
     {
         Schema::create('notification_status', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id', true);
+            $table->string('description', 30);
             $table->timestamps();
         });
     }

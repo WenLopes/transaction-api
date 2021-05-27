@@ -13,8 +13,14 @@ class CreateNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        $defaultNotificationStatus = config('constants.notification.status.WAITING');
+
+        Schema::create('notifications', function (Blueprint $table) use ($defaultNotificationStatus) {
             $table->id();
+            $table->string('to');
+            $table->string('subject');
+            $table->longText('content');
+            $table->integer('notification_status_id')->default($defaultNotificationStatus)->index('FK_Notifications_NotificationStatusId_NotificationStatus_Id');
             $table->timestamps();
         });
     }
