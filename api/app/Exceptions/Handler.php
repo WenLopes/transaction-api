@@ -28,14 +28,47 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * List of mapped exceptions
+     * @var array
+     */
+    protected $mappedExceptions = [
+        'App\Exceptions\Transaction\Transfer\CreateTransferException'
+    ];
+
+    /**
      * Register the exception handling callbacks for the application.
      *
      * @return void
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        // if (!config('app.debug')) {
+            $this->renderable(function (\Exception $e ) {
+
+                $exception = $this->getExceptionInstance($e);
+
+                return response()->json([
+                    'message' => $exception->message()
+                ], $exception->httpCode());
+
+            });
+        // }
+    }
+
+    /**
+     * Get exception instance from mapped exceptions
+     * @var \Exception $e 
+     * @return BaseExceptionInterface
+     */
+    protected function getExceptionInstance(\Exception $e) : BaseExceptionInterface
+    {
+        if( in_array(get_class($e), $this->mappedExceptions) ){
+            $exception_class_name = get_class($e);
+            $exception = new $exception_class_name($e->getMessage());
+            if( $exception instanceof BaseExceptionInterface ){
+                return $exception;
+            }
+        }
+        return new \App\Exceptions\Generic\GenericException($e->getMessage());
     }
 }

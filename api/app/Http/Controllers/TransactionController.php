@@ -12,24 +12,14 @@ class TransactionController extends Controller
         CreateTransferService $createTransferService
     )
     {
-        try {
+        $payload = $request->validated();
 
-            $payload = $request->validated();
+        [
+            'payee' => $payeeId, 
+            'payer' => $payerId,
+            'value' => $value
+        ] = $payload;
 
-            [
-                'payee' => $payeeId, 
-                'payer' => $payerId,
-                'value' => $value
-            ] = $payload;
-
-            $createTransferService->handle($payeeId, $payerId, $value);
-
-        } catch(\Exception $e){
-
-            return response()->json([
-                'error' => 'An error occurs while processing your request'
-            ], 500);
-
-        }
+        $createTransferService->handle($payeeId, $payerId, $value);
     }
 }
