@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Transaction;
 
-use App\Models\Transaction;
+use App\Models\Transaction\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\BaseRepository;
 
