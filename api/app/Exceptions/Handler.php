@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -32,7 +31,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $mappedExceptions = [
-        'App\Exceptions\Transaction\Transfer\CreateTransferException'
+        'App\Exceptions\Transaction\Transfer\CreateTransferException',
+        'App\Exceptions\Transaction\Authorization\CheckAuthorizationException'
     ];
 
     /**
@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        if (!config('app.debug')) {
+        // if (!config('app.debug')) {
             $this->renderable(function (\Exception $e ) {
 
                 $exception = $this->getExceptionInstance($e);
@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
                 ], $exception->httpCode());
 
             });
-        }
+        // }
     }
 
     /**
