@@ -13,6 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call(\Database\Seeders\TransactionStatusSeeder::class);
+
+        $this->call(\Database\Seeders\NotificationStatusSeeder::class);
+
+        $this->call(\Database\Seeders\UserSeeder::class);
     }
 }
