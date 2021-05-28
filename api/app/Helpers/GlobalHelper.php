@@ -7,14 +7,17 @@
  * @param String $index
  * @return Mixed
  */
-function getProperty($source, string $index)
+if ( ! function_exists('getProperty'))
 {
-    if( gettype($source) == 'object'){
-        $source = (array) $source;
+    function getProperty($source, string $index)
+    {
+        if( gettype($source) == 'object'){
+            $source = (array) $source;
+        }
+    
+        if( array_key_exists("{$index}", $source) ){
+            return $source["{$index}"];
+        }
+        return null;
     }
-
-    if( array_key_exists("{$index}", $source) ){
-        return $source["{$index}"];
-    }
-    return null;
 }
