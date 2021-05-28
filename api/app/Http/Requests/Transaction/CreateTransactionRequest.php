@@ -3,8 +3,6 @@
 namespace App\Http\Requests\Transaction;
 
 use App\Http\Requests\BaseFormRequest;
-use Illuminate\Foundation\Http\FormRequest;
-
 
 class CreateTransactionRequest extends BaseFormRequest
 {
@@ -35,12 +33,13 @@ class CreateTransactionRequest extends BaseFormRequest
                 'required',
                 'integer',
                 'user_active',
-                'not_seller'
+                'user_not_seller',
+                'user_has_balance'
             ],
             'payee' => [
                 'required',
                 'integer',
-                'exists:users,id',
+                'user_active',
                 'different:payer'
             ]
         ];
