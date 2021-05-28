@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Transaction\CreateTransactionRequest;
-use App\Services\Transaction\Transfer\CreateTransferService;
+use App\Services\Transaction\Transfer\CreateTransferServiceInterface;
 
 class TransactionController extends Controller
 {
     public function create(
         CreateTransactionRequest $request,
-        CreateTransferService $createTransferService
+        CreateTransferServiceInterface $createTransferService
     )
     {
         $payload = $request->validated();

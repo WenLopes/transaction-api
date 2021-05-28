@@ -3,9 +3,10 @@
 namespace App\Services\Transaction\Transfer;
 
 use App\Exceptions\Transaction\Transfer\CreateTransferException;
+use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 
-class CreateTransferService {
+class CreateTransferService implements CreateTransferServiceInterface {
 
     /** @var TransactionRepositoryInterface */
     protected $transactionRepo;
@@ -14,14 +15,13 @@ class CreateTransferService {
         $this->transactionRepo = $transactionRepo;
     }
 
-    public function handle(int $payeeId, int $payerId, float $value) : bool
+    public function handle(int $payeeId, int $payerId, float $value) : Transaction
     {
         try {
-
-            throw new \Exception('Forçando erro');
             \DB::beginTransaction();
+            $transaction = $this->createTransaction($payeeId, $payerId, $value);
             \DB::commit();
-            return true;
+            return $transaction;
 
         } catch (\Exception $e) {
 
@@ -29,5 +29,14 @@ class CreateTransferService {
             throw new CreateTransferException($e->getMessage());
 
         }
+    }
+
+    protected function createTransaction(int $payee, int $payer, float $value) : Transaction
+    {
+        return $this->transactionRepo->create([
+            'payee_id' => $payee,
+            'payer_id' => $payer,
+            'value' => $value
+        ]);
     }
 }
