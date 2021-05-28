@@ -21,12 +21,12 @@ class UserHasBalance {
             return false;
         }
 
-        $transaction_value = getProperty( $validator->getData(), 'value' );
+        $transactionValue = getProperty( $validator->getData(), 'value' );
         
-        if(!$transaction_value){
+        if(!$transactionValue){
             return false;
         }
 
-        return $user->balance >= $transaction_value;
+        return $user->balance >= $transactionValue;
     }
 }
