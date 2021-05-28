@@ -38,4 +38,23 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
     ): ?Model {
         return $this->model->select($columns)->with($relations)->active()->find($modelId);
     }
+
+    public function subtractBalance(int $user_id, float $value) : bool
+    {
+        $user = $this->findById($user_id);
+
+        if( !$user ){
+            return false;
+        }
+
+        if( $user->balance < $value ){
+            return false;
+        }
+
+        $new_balance = ($user->balance - $value);
+
+        return $this->update($user_id, [
+            'balance' => $new_balance
+        ]);
+    }
 }
