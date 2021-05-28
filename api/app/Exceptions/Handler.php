@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        // if (!config('app.debug')) {
+        if (!config('app.debug')) {
             $this->renderable(function (\Exception $e ) {
 
                 $exception = $this->getExceptionInstance($e);
@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
                 ], $exception->httpCode());
 
             });
-        // }
+        }
     }
 
     /**
