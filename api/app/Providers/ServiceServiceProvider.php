@@ -15,7 +15,11 @@ class ServiceServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        /** Transactions */
+        $this->app->bind( 
+            \App\Services\Transaction\Transfer\CreateTransferServiceInterface::class, 
+            \App\Services\Transaction\Transfer\CreateTransferService::class
+        );
     }
 
     /**
