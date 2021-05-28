@@ -14,12 +14,19 @@ class ServiceServiceProvider extends ServiceProvider
      * @return void
      */
     public function register()
-    {
-        /** Transactions */
+    {        
+        //Transfer
         $this->app->bind( 
             \App\Services\Transaction\Transfer\CreateTransferServiceInterface::class, 
             \App\Services\Transaction\Transfer\CreateTransferService::class
         );
+
+        //Authorization
+        $this->app->bind( 
+            \App\Services\Transaction\Authorization\AuthorizationServiceInterface::class, 
+            \App\Services\Transaction\Authorization\AuthorizationService::class
+        );
+
     }
 
     /**
