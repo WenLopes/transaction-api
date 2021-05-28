@@ -121,9 +121,11 @@ return [
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',
+
     // Custom validations:
     'user_active' => 'The :attribute is not active',
-    'not_seller' => 'The :attribute cannot be a seller',
+    'user_not_seller' => 'The :attribute cannot be a seller',
+    'user_has_balance' => 'The :attribute has no balance to proceed',
 
     /*
     |--------------------------------------------------------------------------

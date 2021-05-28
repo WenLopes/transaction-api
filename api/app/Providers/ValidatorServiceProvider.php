@@ -24,7 +24,13 @@ class ValidatorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        /** User must be active */
         Validator::extend('user_active', 'App\Http\Validators\UserActive@passes');
-        Validator::extend('not_seller', 'App\Http\Validators\NotSeller@passes');
+
+        /** User cannot be a seller */
+        Validator::extend('user_not_seller', 'App\Http\Validators\UserNotSeller@passes');
+        
+        /** ser must have a balance greater than the value of the transaction */
+        Validator::extend('user_has_balance', 'App\Http\Validators\UserHasBalance@passes');
     }
 }

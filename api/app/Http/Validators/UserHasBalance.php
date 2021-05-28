@@ -4,7 +4,7 @@ namespace App\Http\Validators;
 
 use App\Repositories\User\UserRepositoryInterface;
 
-class NotSeller {
+class UserHasBalance {
 
     /** @var UserRepositoryInterface */
     protected $userRepo;
@@ -13,7 +13,7 @@ class NotSeller {
         $this->userRepo = $userRepo;
     }
 
-    public function passes($attribute, $value)
+    public function passes($attribute, $value, $parameters, $validator)
     {
         $user = $this->userRepo->findById( $value );
 
@@ -21,10 +21,12 @@ class NotSeller {
             return false;
         }
 
-        if($user->is_seller){
+        $transaction_value = getProperty( $validator->getData(), 'value' );
+        
+        if(!$transaction_value){
             return false;
         }
 
-        return true;
+        return $user->balance >= $transaction_value;
     }
 }
