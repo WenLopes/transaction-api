@@ -176,7 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FakerServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
-        App\Providers\ValidatorServiceProvider::class
+        App\Providers\ValidatorServiceProvider::class,
+        App\Providers\ServiceServiceProvider::class
 
     ],
 
