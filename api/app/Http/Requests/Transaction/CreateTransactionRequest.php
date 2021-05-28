@@ -30,6 +30,7 @@ class CreateTransactionRequest extends BaseFormRequest
                 'min:0.01'
             ],
             'payer' => [
+                'bail',
                 'required',
                 'integer',
                 'user_active',
@@ -37,6 +38,7 @@ class CreateTransactionRequest extends BaseFormRequest
                 'user_has_balance'
             ],
             'payee' => [
+                'bail',
                 'required',
                 'integer',
                 'user_active',
