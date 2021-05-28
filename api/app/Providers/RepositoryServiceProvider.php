@@ -18,6 +18,12 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\User\UserRepositoryInterface::class, 
             \App\Repositories\User\UserRepository::class
         );
+
+        /** TransactionRepo */
+        $this->app->bind( 
+            \App\Repositories\Transaction\TransactionRepositoryInterface::class, 
+            \App\Repositories\Transaction\TransactionRepository::class
+        );
     }
 
     /**
