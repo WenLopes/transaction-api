@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Services\Transaction\Transfer\CreateTransferService;
-use App\Services\Transaction\Transfer\CreateTransferServiceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class ServiceServiceProvider extends ServiceProvider
@@ -19,6 +17,11 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind( 
             \App\Services\Transaction\Transfer\CreateTransferServiceInterface::class, 
             \App\Services\Transaction\Transfer\CreateTransferService::class
+        );
+
+        $this->app->bind( 
+            \App\Services\Transaction\Transfer\CompleteTransferServiceInterface::class, 
+            \App\Services\Transaction\Transfer\CompleteTransferService::class
         );
 
         //Authorization
