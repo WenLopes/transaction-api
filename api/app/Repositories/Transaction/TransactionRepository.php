@@ -23,4 +23,23 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
         $this->model = $model;
     }
 
+    /**
+     * Adds value to the user's balance
+     * @param int $transactionId
+     * @return bool
+     */
+    public function setAsComplete( int $transactionId ) : bool {
+
+        $transaction = $this->findById($transactionId);
+
+        if( !$transaction ){
+            return false;
+        }
+
+        $successStatus = config('constants.transaction.status.SUCCESS');
+
+        return $this->update($transactionId, [
+            'transaction_status_id' => $successStatus
+        ]);
+    }
 }
