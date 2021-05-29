@@ -8,4 +8,6 @@ interface TransactionRepositoryInterface extends BaseRepositoryInterface {
 
     public function setAsComplete( int $transactionId ) : bool;
 
+    public function setAsFailed( int $transactionId ) : bool;
+
 }

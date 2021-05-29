@@ -24,7 +24,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
     }
 
     /**
-     * Adds value to the user's balance
+     * Set transaction status as success
      * @param int $transactionId
      * @return bool
      */
@@ -40,6 +40,26 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
 
         return $this->update($transactionId, [
             'transaction_status_id' => $successStatus
+        ]);
+    }
+
+    /**
+     * Set transaction status as error
+     * @param int $transactionId
+     * @return bool
+     */
+    public function setAsFailed( int $transactionId ) : bool {
+
+        $transaction = $this->findById($transactionId);
+
+        if( !$transaction ){
+            return false;
+        }
+
+        $errorStatus = config('constants.transaction.status.ERROR');
+
+        return $this->update($transactionId, [
+            'transaction_status_id' => $errorStatus
         ]);
     }
 }
