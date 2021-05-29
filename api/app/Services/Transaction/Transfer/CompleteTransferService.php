@@ -2,6 +2,7 @@
 
 namespace App\Services\Transaction\Transfer;
 
+use App\Exceptions\Transaction\Transfer\CompleteTransferException;
 use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -43,7 +44,7 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
         } catch (\Exception $e){
             
             \DB::rollback();
-            throw new \Exception($e->getMessage());
+            throw new CompleteTransferException($e->getMessage());
 
         }
     }
