@@ -17,10 +17,11 @@ class CreateNotificationsTable extends Migration
 
         Schema::create('notifications', function (Blueprint $table) use ($defaultNotificationStatus) {
             $table->id();
-            $table->string('to');
+            $table->unsignedBigInteger('user_id')->index('fk_notifications_user_id_idx');
+            $table->integer('notification_status_id')->default($defaultNotificationStatus)->index('fk_notifications_notification_status_id_idx');
             $table->string('subject');
             $table->longText('content');
-            $table->integer('notification_status_id')->default($defaultNotificationStatus)->index('FK_Notifications_NotificationStatusId_NotificationStatus_Id');
+            $table->boolean('dispatched')->default(false);
             $table->timestamps();
         });
     }

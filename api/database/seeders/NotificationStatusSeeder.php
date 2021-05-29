@@ -20,7 +20,9 @@ class NotificationStatusSeeder extends Seeder
         foreach($allStatus as $description => $id){
             \DB::table('notification_status')->insert([
                 'id'          => $id,
-                'description' => $description
+                'description' => $description,
+                'created_at'  => now(),
+                'updated_at'  => now()
             ]);
         }
 

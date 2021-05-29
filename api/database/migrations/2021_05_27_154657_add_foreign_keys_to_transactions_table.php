@@ -14,20 +14,24 @@ class AddForeignKeysToTransactionsTable extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreign(
-                'transaction_status_id', 
-                'FK_Transactions_TransactionStatusId_TransactionStatus_Id'
-            )->references('id')->on('transaction_status')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreign('transaction_status_id', 'fk_transactions_transaction_status_id')
+                ->references('id')
+                ->on('transaction_status')
+                ->onUpdate('NO ACTION')
+                ->onDelete('NO ACTION');
 
-            $table->foreign(
-                'payee_id', 
-                'FK_Transactions_PayeeId_Users_Id'
-            )->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreign( 'payee_id', 'fk_transactions_payee_id_users_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('NO ACTION')
+                ->onDelete('NO ACTION');
             
-            $table->foreign(
-                'payer_id', 
-                'FK_Transactions_PayerId_Users_Id'
-            )->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreign( 'payer_id', 'fk_transactions_payer_id_users_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('NO ACTION')
+                ->onDelete('NO ACTION');
+
         });
     }
 
@@ -39,9 +43,9 @@ class AddForeignKeysToTransactionsTable extends Migration
     public function down()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->dropForeign('FK_Transactions_TransactionStatusId_TransactionStatus_Id');
-            $table->dropForeign('FK_Transactions_PayeeId_Users_Id');
-            $table->dropForeign('FK_Transactions_PayerId_Users_Id');
+            $table->dropForeign('fk_transactions_transaction_status_id');
+            $table->dropForeign('fk_transactions_payee_id_users_id');
+            $table->dropForeign('fk_transactions_payer_id_users_id');
         });
     }
 }
