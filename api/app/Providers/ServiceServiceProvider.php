@@ -35,6 +35,12 @@ class ServiceServiceProvider extends ServiceProvider
             \App\Services\Transaction\Authorization\AuthorizationService::class
         );
 
+        //Notification
+        $this->app->bind( 
+            \App\Services\Notification\NotificationServiceInterface::class, 
+            \App\Services\Notification\NotificationService::class
+        );
+
     }
 
     /**
