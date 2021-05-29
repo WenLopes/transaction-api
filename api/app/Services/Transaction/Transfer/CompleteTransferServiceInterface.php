@@ -8,7 +8,7 @@ interface CompleteTransferServiceInterface {
 
     /**
      * Handle transfer completion
-     * @return Transaction
+     * @return bool
      */
     public function handle(Transaction $transaction) : bool;
 }
