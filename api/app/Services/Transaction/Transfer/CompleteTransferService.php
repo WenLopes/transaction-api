@@ -30,7 +30,7 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
             \DB::beginTransaction();
 
             if( ! $this->userRepo->addBalance($transaction->payee_id, $transaction->value) ){
-                throw new \Exception("Error adding value to user balance");
+                throw new \Exception("Error adding value to payee balance");
             }
 
             if( ! $this->transactionRepo->setAsComplete($transaction->id) ){
