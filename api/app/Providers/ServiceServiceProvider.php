@@ -24,6 +24,11 @@ class ServiceServiceProvider extends ServiceProvider
             \App\Services\Transaction\Transfer\CompleteTransferService::class
         );
 
+        $this->app->bind( 
+            \App\Services\Transaction\Transfer\RollbackTransferServiceInterface::class, 
+            \App\Services\Transaction\Transfer\RollbackTransferService::class
+        );
+
         //Authorization
         $this->app->bind( 
             \App\Services\Transaction\Authorization\AuthorizationServiceInterface::class, 
