@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Transaction\Transfer;
 
+use App\Exceptions\Transaction\Transfer\ProcessTransferJobException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -47,18 +48,11 @@ class ProcessTransferJob implements ShouldQueue
         RollbackTransferServiceInterface $rollbackTransferService
     ) : bool
     {
-        try {
-
-            if( $authorizationService->authorized() ){
-                $completeTransferService->handle( $this->transaction );
-                return true;
-            }
-
-            $rollbackTransferService->handle($this->transaction);
-            return true;
-
-        } catch (\Exception $e){
+        if( $authorizationService->authorized() ){
+            return $completeTransferService->handle( $this->transaction );
         }
+
+        return $rollbackTransferService->handle($this->transaction);
     }
 
     /**
@@ -69,5 +63,6 @@ class ProcessTransferJob implements ShouldQueue
      */
     public function failed(\Exception $e)
     {
+        throw new ProcessTransferJobException($e->getMessage());
     }
 }
