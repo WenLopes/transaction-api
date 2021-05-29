@@ -4,6 +4,7 @@ namespace App\Listeners\Transaction\Transfer;
 
 use App\Events\Transaction\Transfer\TransferSuccess;
 use App\Exceptions\Transaction\Transfer\DispatchTransferNotificationException;
+use App\Jobs\Notification\SendNotificationJob;
 use App\Models\Notification\Notification;
 use App\Models\Transaction\Transaction;
 use App\Repositories\Notification\NotificationRepositoryInterface;
@@ -54,6 +55,7 @@ class DispatchSuccessTransferNotification
         $subject = "Transferência realizada com sucesso";
         $content = "Sua transferência no valor de {$transaction->value} para {$transaction->payee_id} foi realizada com sucesso";
         $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
+        dispatch( new SendNotificationJob($notification) );
     }
 
     /**
@@ -66,6 +68,7 @@ class DispatchSuccessTransferNotification
         $subject = "Você recebeu uma transferência";
         $content = "Você recebeu uma transferência no valor de {$transaction->payer_id}, no valor de {$transaction->value}";
         $notification = $this->createNotification( $transaction->payee_id, $subject, $content );
+        dispatch( new SendNotificationJob($notification) );
     }
 
     /**

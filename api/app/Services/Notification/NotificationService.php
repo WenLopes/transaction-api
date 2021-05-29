@@ -27,7 +27,7 @@ class NotificationService implements NotificationServiceInterface {
     {
         try {
             \DB::beginTransaction();
-            throw new \Exception('Forçando erro');
+
             $notification = $this->notificationRepo->setAsDispatched($notification->id);
             if( ! $notification ){
                 throw new \Exception("Error setting notification status as dispatched");

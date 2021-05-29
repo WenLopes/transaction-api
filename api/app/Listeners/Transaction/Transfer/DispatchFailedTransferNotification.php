@@ -4,6 +4,7 @@ namespace App\Listeners\Transaction\Transfer;
 
 use App\Events\Transaction\Transfer\TransferSuccess;
 use App\Exceptions\Transaction\Transfer\DispatchTransferNotificationException;
+use App\Jobs\Transaction\Transfer\SendNotificationJob;
 use App\Models\Notification\Notification;
 use App\Models\Transaction\Transaction;
 use App\Repositories\Notification\NotificationRepositoryInterface;
@@ -55,6 +56,7 @@ class DispatchFailedTransferNotification
                     "Mas não se preocupe, o valor será enviado será creditado em sua conta.";
 
         $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
+        dispatch( new SendNotificationJob($notification) );
     }
 
     /**
