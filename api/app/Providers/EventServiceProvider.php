@@ -20,7 +20,11 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         \App\Events\Transaction\Transfer\TransferSuccess::class => [
-            \App\Listeners\Transaction\Transfer\DispatchSuccessNotification::class
+            \App\Listeners\Transaction\Transfer\DispatchSuccessTransferNotification::class
+        ],
+
+        \App\Events\Transaction\Transfer\TransferFailed::class => [
+            \App\Listeners\Transaction\Transfer\DispatchFailedTransferNotification::class
         ]
     ];
 

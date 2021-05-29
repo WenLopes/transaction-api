@@ -2,6 +2,7 @@
 
 namespace App\Services\Transaction\Transfer;
 
+use App\Events\Transaction\Transfer\TransferFailed;
 use App\Exceptions\Transaction\Transfer\RollbackTransferException;
 use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
@@ -36,6 +37,8 @@ class RollbackTransferService implements RollbackTransferServiceInterface {
             if( ! $this->transactionRepo->setAsFailed($transaction->id) ){
                 throw new \Exception("Error setting transaction status as failed");
             }
+
+            event( new TransferFailed($transaction) );
 
             \DB::commit();
 

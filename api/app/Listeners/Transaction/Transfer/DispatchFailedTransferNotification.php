@@ -10,7 +10,7 @@ use App\Repositories\Notification\NotificationRepositoryInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DispatchSuccessNotification
+class DispatchFailedTransferNotification
 {
 
     /** @var NotificationRepositoryInterface */
@@ -37,7 +37,6 @@ class DispatchSuccessNotification
         try {
             $transaction = $event->getTransaction();
             $this->dispatchToPayer($transaction);
-            $this->dispatchToPayee($transaction);
         } catch (\Exception $e){
             throw new DispatchTransferNotificationException($e->getMessage());
         }
@@ -51,21 +50,11 @@ class DispatchSuccessNotification
      */
     protected function dispatchToPayer(Transaction $transaction) : void
     {
-        $subject = "Transferência realizada com sucesso";
-        $content = "Sua transferência no valor de {$transaction->value} para {$transaction->payee_id} foi realizada com sucesso";
-        $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
-    }
+        $subject = "Erro ao realizar transferência";
+        $content =  "Ocorreu um erro ao realizar sua transferência no valor de {$transaction->value} para {$transaction->payee_id}. ". 
+                    "Mas não se preocupe, o valor será enviado será creditado em sua conta.";
 
-    /**
-     * Dispatches the job responsible for sending notification to transaction payee
-     * @var Transaction $transaction
-     * @return void
-     */
-    protected function dispatchToPayee(Transaction $transaction) : void
-    {
-        $subject = "Você recebeu uma transferência";
-        $content = "Você recebeu uma transferência no valor de {$transaction->payer_id}, no valor de {$transaction->value}";
-        $notification = $this->createNotification( $transaction->payee_id, $subject, $content );
+        $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
     }
 
     /**
