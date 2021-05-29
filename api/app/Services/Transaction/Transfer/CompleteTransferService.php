@@ -2,6 +2,7 @@
 
 namespace App\Services\Transaction\Transfer;
 
+use App\Events\Transaction\Transfer\TransferSuccess;
 use App\Exceptions\Transaction\Transfer\CompleteTransferException;
 use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
@@ -33,9 +34,12 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
                 throw new \Exception("Error adding value to payee balance");
             }
 
-            if( ! $this->transactionRepo->setAsComplete($transaction->id) ){
+            $transaction = $this->transactionRepo->setAsComplete($transaction->id);
+            if( ! $transaction ){
                 throw new \Exception("Error setting transaction status as complete");
             }
+
+            event( new TransferSuccess($transaction) );
 
             \DB::commit();
 
