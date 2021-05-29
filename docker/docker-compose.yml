@@ -62,7 +62,6 @@ services:
       container_name: php_transaction
       volumes:
         - ../:/transaction
-        - ./php/php-ini-overrides.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
       networks:
         transaction_network:
           ipv4_address: 100.10.0.14

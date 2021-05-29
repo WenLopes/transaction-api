@@ -23,4 +23,43 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
         $this->model = $model;
     }
 
+    /**
+     * Set transaction status as success
+     * @param int $transactionId
+     * @return bool
+     */
+    public function setAsComplete( int $transactionId ) : bool {
+
+        $transaction = $this->findById($transactionId);
+
+        if( !$transaction ){
+            return false;
+        }
+
+        $successStatus = config('constants.transaction.status.SUCCESS');
+
+        return $this->update($transactionId, [
+            'transaction_status_id' => $successStatus
+        ]);
+    }
+
+    /**
+     * Set transaction status as error
+     * @param int $transactionId
+     * @return bool
+     */
+    public function setAsFailed( int $transactionId ) : bool {
+
+        $transaction = $this->findById($transactionId);
+
+        if( !$transaction ){
+            return false;
+        }
+
+        $errorStatus = config('constants.transaction.status.ERROR');
+
+        return $this->update($transactionId, [
+            'transaction_status_id' => $errorStatus
+        ]);
+    }
 }
