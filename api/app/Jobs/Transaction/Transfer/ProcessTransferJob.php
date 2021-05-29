@@ -11,6 +11,8 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Transaction\Transaction;
 use App\Services\Transaction\Authorization\AuthorizationServiceInterface;
 use App\Services\Transaction\Transfer\CompleteTransferServiceInterface;
+use App\Services\Transaction\Transfer\RollbackTransferServiceInterface;
+
 class ProcessTransferJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -41,19 +43,18 @@ class ProcessTransferJob implements ShouldQueue
      */
     public function handle(
         AuthorizationServiceInterface $authorizationService,
-        CompleteTransferServiceInterface $completeTransferService
+        CompleteTransferServiceInterface $completeTransferService,
+        RollbackTransferServiceInterface $rollbackTransferService
     ) : bool
     {
         try {
 
             if( $authorizationService->authorized() ){
-
                 $completeTransferService->handle( $this->transaction );
-                // Dispachar notificação.
                 return true;
             }
 
-            // Rollback na transação
+            $rollbackTransferService->handle($this->transaction);
             return true;
 
         } catch (\Exception $e){
