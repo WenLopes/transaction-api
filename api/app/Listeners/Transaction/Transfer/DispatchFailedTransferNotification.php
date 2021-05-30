@@ -4,7 +4,7 @@ namespace App\Listeners\Transaction\Transfer;
 
 use App\Events\Transaction\Transfer\TransferSuccess;
 use App\Exceptions\Transaction\Transfer\DispatchTransferNotificationException;
-use App\Jobs\Transaction\Transfer\SendNotificationJob;
+use App\Jobs\Notification\SendNotificationJob;
 use App\Models\Notification\Notification;
 use App\Models\Transaction\Transaction;
 use App\Repositories\Notification\NotificationRepositoryInterface;
@@ -52,7 +52,7 @@ class DispatchFailedTransferNotification
     protected function dispatchToPayer(Transaction $transaction) : void
     {
         $subject = "Error while transferring";
-        $content =  "An error occurred while making your transfer in the amount of {$transaction->value} to {$transaction->payee->name}. ". 
+        $content =  "An error occurred while making your transfer in the amount of ".format_brl($transaction->value)." to {$transaction->payee->name}. ". 
                     "But don't worry, the amount will be sent will be credited to your balance.";
 
         $notification = $this->createNotification( $transaction->payer_id, $subject, $content );

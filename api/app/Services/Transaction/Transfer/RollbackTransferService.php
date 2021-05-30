@@ -4,7 +4,6 @@ namespace App\Services\Transaction\Transfer;
 
 use App\Events\Transaction\Transfer\TransferFailed;
 use App\Exceptions\Transaction\Transfer\RollbackTransferException;
-use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 
@@ -24,18 +23,20 @@ class RollbackTransferService implements RollbackTransferServiceInterface {
         $this->userRepo = $userRepo;
     }
 
-    public function handle(Transaction $transaction) : bool
+    public function handle(int $transactionId) : bool
     {
         try {
 
             \DB::beginTransaction();
 
-            if( ! $this->userRepo->addBalance($transaction->payer_id, $transaction->value) ){
-                throw new \Exception("Error adding value to payer balance");
+            if( ! $this->transactionRepo->setAsError($transactionId) ){
+                throw new \Exception("Error setting transaction status as failed");
             }
 
-            if( ! $this->transactionRepo->setAsError($transaction->id) ){
-                throw new \Exception("Error setting transaction status as failed");
+            $transaction = $this->transactionRepo->findById($transactionId);
+
+            if( ! $this->userRepo->addBalance($transaction->payer_id, $transaction->value) ){
+                throw new \Exception("Error adding value to payer balance");
             }
 
             event( new TransferFailed($transaction) );

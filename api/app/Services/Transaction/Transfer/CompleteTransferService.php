@@ -4,7 +4,6 @@ namespace App\Services\Transaction\Transfer;
 
 use App\Events\Transaction\Transfer\TransferSuccess;
 use App\Exceptions\Transaction\Transfer\CompleteTransferException;
-use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 
@@ -24,19 +23,20 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
         $this->userRepo = $userRepo;
     }
 
-    public function handle(Transaction $transaction) : bool
+    public function handle(int $transactionId) : bool
     {
         try {
 
             \DB::beginTransaction();
 
-            if( ! $this->userRepo->addBalance($transaction->payee_id, $transaction->value) ){
-                throw new \Exception("Error adding value to payee balance");
+            if( ! $this->transactionRepo->setAsSuccess($transactionId) ){
+                throw new \Exception("Error setting transaction status as complete");
             }
 
-            $transaction = $this->transactionRepo->setAsSuccess($transaction->id);
-            if( ! $transaction ){
-                throw new \Exception("Error setting transaction status as complete");
+            $transaction = $this->transactionRepo->findById($transactionId);
+
+            if( ! $this->userRepo->addBalance($transaction->payee_id, $transaction->value) ){
+                throw new \Exception("Error adding value to payee balance");
             }
 
             event( new TransferSuccess($transaction) );

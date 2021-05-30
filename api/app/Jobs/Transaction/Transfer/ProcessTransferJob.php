@@ -9,7 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Transaction\Transaction;
 use App\Services\Transaction\Authorization\AuthorizationServiceInterface;
 use App\Services\Transaction\Transfer\CompleteTransferServiceInterface;
 use App\Services\Transaction\Transfer\RollbackTransferServiceInterface;
@@ -19,22 +18,22 @@ class ProcessTransferJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /** @var int */
-    public $tries = 5;
+    public $tries = 3;
 
     /** @var int */
-    public $maxExceptions = 5;
+    public $maxExceptions = 3;
 
-    /** @var Transaction */
-    public $transaction;
+    /** @var int */
+    public $transactionId;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Transaction $transaction)
+    public function __construct(int $transactionId)
     {
-        $this->transaction = $transaction;
+        $this->transactionId = $transactionId;
     }
 
     /**
@@ -49,10 +48,10 @@ class ProcessTransferJob implements ShouldQueue
     ) : bool
     {
         if( $authorizationService->authorized() ){
-            return $completeTransferService->handle( $this->transaction );
+            return $completeTransferService->handle( $this->transactionId );
         }
 
-        return $rollbackTransferService->handle($this->transaction);
+        return $rollbackTransferService->handle( $this->transactionId );
     }
 
     /**
