@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 abstract class BaseException extends \Exception implements BaseExceptionInterface {
     
@@ -33,6 +34,12 @@ abstract class BaseException extends \Exception implements BaseExceptionInterfac
     public function httpCode(): int
     {
         return $this->fatalErrorCode;
+    }
+
+    public function log() : void
+    {
+        $exception = get_class($this);
+        Log::channel('exception')->error("Exception: {$exception} | Message: {$this->errorMessage()}");
     }
 
     /**

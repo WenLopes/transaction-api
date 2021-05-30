@@ -52,6 +52,8 @@ class Handler extends ExceptionHandler
 
                 $exception = $this->getExceptionInstance($e);
 
+                $exception->log();
+
                 return response()->json([
                     'message' => $exception->message()
                 ], $exception->httpCode());
