@@ -9,7 +9,7 @@ class SendNotificationException extends BaseException implements BaseExceptionIn
     
     public function message() : string
     {
-        return 'Um erro ocorreu ao enviar a notificação';
+        return 'An error occurred while sending the notification.';
     }
 
 }

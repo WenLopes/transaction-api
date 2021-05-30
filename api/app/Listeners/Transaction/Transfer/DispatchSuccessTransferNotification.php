@@ -52,8 +52,8 @@ class DispatchSuccessTransferNotification
      */
     protected function dispatchToPayer(Transaction $transaction) : void
     {
-        $subject = "Transferência realizada com sucesso";
-        $content = "Sua transferência no valor de {$transaction->value} para {$transaction->payee_id} foi realizada com sucesso";
+        $subject = "Transfer successful!";
+        $content = "Your transfer in the amount of R$ {$transaction->value} to {$transaction->payee->name} was successful";
         $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
         dispatch( new SendNotificationJob($notification) );
     }
@@ -65,8 +65,8 @@ class DispatchSuccessTransferNotification
      */
     protected function dispatchToPayee(Transaction $transaction) : void
     {
-        $subject = "Você recebeu uma transferência";
-        $content = "Você recebeu uma transferência no valor de {$transaction->payer_id}, no valor de {$transaction->value}";
+        $subject = "You received a transfer!";
+        $content = "{$transaction->payer->name} made you a transfer in the amount of R$ {$transaction->value}";
         $notification = $this->createNotification( $transaction->payee_id, $subject, $content );
         dispatch( new SendNotificationJob($notification) );
     }

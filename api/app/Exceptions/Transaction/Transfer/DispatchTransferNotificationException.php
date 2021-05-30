@@ -9,7 +9,7 @@ class DispatchTransferNotificationException extends BaseException implements Bas
     
     public function message() : string
     {
-        return 'Um erro ocorreu ao despachar notificações relacionadas a transferência para os usuários';
+        return 'An error occurred while dispatching notifications to the processing service';
     }
 
 }

@@ -51,9 +51,9 @@ class DispatchFailedTransferNotification
      */
     protected function dispatchToPayer(Transaction $transaction) : void
     {
-        $subject = "Erro ao realizar transferência";
-        $content =  "Ocorreu um erro ao realizar sua transferência no valor de {$transaction->value} para {$transaction->payee_id}. ". 
-                    "Mas não se preocupe, o valor será enviado será creditado em sua conta.";
+        $subject = "Error while transferring";
+        $content =  "An error occurred while making your transfer in the amount of {$transaction->value} to {$transaction->payee->name}. ". 
+                    "But don't worry, the amount will be sent will be credited to your balance.";
 
         $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
         dispatch( new SendNotificationJob($notification) );
