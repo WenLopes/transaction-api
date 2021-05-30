@@ -34,7 +34,7 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
                 throw new \Exception("Error adding value to payee balance");
             }
 
-            $transaction = $this->transactionRepo->setAsComplete($transaction->id);
+            $transaction = $this->transactionRepo->setAsSuccess($transaction->id);
             if( ! $transaction ){
                 throw new \Exception("Error setting transaction status as complete");
             }

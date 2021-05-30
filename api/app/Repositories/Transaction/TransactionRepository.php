@@ -28,7 +28,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
      * @param int $transactionId
      * @return bool
      */
-    public function setAsComplete( int $transactionId ) : ?Transaction {
+    public function setAsSuccess( int $transactionId ) : ?Transaction {
 
         $transaction = $this->findById($transactionId);
 
@@ -54,7 +54,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
      * @param int $transactionId
      * @return bool
      */
-    public function setAsFailed( int $transactionId ) : ?Transaction {
+    public function setAsError( int $transactionId ) : ?Transaction {
 
         $transaction = $this->findById($transactionId);
 

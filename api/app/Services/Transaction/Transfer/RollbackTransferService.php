@@ -34,7 +34,7 @@ class RollbackTransferService implements RollbackTransferServiceInterface {
                 throw new \Exception("Error adding value to payer balance");
             }
 
-            if( ! $this->transactionRepo->setAsFailed($transaction->id) ){
+            if( ! $this->transactionRepo->setAsError($transaction->id) ){
                 throw new \Exception("Error setting transaction status as failed");
             }
 

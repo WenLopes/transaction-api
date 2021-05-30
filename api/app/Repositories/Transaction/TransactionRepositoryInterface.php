@@ -7,8 +7,8 @@ use App\Repositories\BaseRepositoryInterface;
 
 interface TransactionRepositoryInterface extends BaseRepositoryInterface {
 
-    public function setAsComplete( int $transactionId ) : ?Transaction;
+    public function setAsSuccess( int $transactionId ) : ?Transaction;
 
-    public function setAsFailed( int $transactionId ) : ?Transaction;
+    public function setAsError( int $transactionId ) : ?Transaction;
 
 }

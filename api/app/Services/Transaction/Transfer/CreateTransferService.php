@@ -36,8 +36,7 @@ class CreateTransferService implements CreateTransferServiceInterface {
         try {
 
             \DB::beginTransaction();
-            
-            throw new \Exception('Forçando escrita de log');
+
             $transaction = $this->createTransaction($payeeId, $payerId, $value);
             
             if( ! $this->userRepo->subtractBalance($transaction->payer_id, $transaction->value) ){
