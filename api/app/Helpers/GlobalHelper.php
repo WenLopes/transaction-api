@@ -4,7 +4,7 @@
  * Returns the value of the key passed as a parameter
  * 
  * @param Array|Object $source
- * @param String $index
+ * @param string $index
  * @return Mixed
  */
 if ( ! function_exists('getProperty'))
@@ -19,5 +19,19 @@ if ( ! function_exists('getProperty'))
             return $source["{$index}"];
         }
         return null;
+    }
+}
+
+/**
+ * Returns formatted decimal value for the BRL pattern
+ * 
+ * @param float $value
+ * @param int $num_after_comma
+ * @return string
+ */
+if (! function_exists('format_brl')) {
+    function format_brl(float $value, int $num_after_comma = 2) : string
+    {
+        return number_format($value, $num_after_comma, ',', '.');
     }
 }
