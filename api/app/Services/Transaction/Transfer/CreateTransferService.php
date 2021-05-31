@@ -67,7 +67,7 @@ class CreateTransferService implements CreateTransferServiceInterface {
      * @var float $value
      * @return Transaction
      */
-    protected function createTransaction(int $payee, int $payer, float $value) : Transaction
+    protected function createTransaction(int $payee, int $payer, float $value) : ?Transaction
     {
         return $this->transactionRepo->create([
             'payee_id' => $payee,
