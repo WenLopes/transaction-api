@@ -4,9 +4,7 @@ namespace Tests\Unit\Transaction\Transfer;
 
 use App\Exceptions\Transaction\Transfer\CreateTransferException;
 use App\Models\Transaction\Transaction;
-use App\Repositories\Transaction\TransactionRepository;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
-use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Transaction\Transfer\CreateTransferService;
 use App\Services\Transaction\Transfer\CreateTransferServiceInterface;
@@ -17,66 +15,71 @@ class CreateTransferServiceTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function serviceParametersDataProvider()
+    private $userRepo;    
+    private $transactionRepo;
+    private $payer;
+    private $payee;
+
+    protected function setUp() : void
     {
-        return [
-            'valid_parameters' => [
-                'payer' => 1,
-                'payee' => 2,
-                'value' => 10.00
-            ]
-        ];
+        parent::setUp();
+
+        $this->userRepo = $this->createMock(UserRepositoryInterface::class);
+
+        $this->transactionRepo = $this->createMock(TransactionRepositoryInterface::class);
+
+        $this->payer = \App\Models\User\User::factory()->create([
+            'is_seller' => false,
+            'balance' => 1000
+        ]);
+
+        $this->payee = \App\Models\User\User::factory()->create([
+            'is_seller' => true
+        ]);
     }
 
     /** 
      * @test 
-     * @dataProvider serviceParametersDataProvider
      */
-    public function testShouldNotFinishWhenTransactionIsNotCreatedInDatabase($payer, $payee, $value)
+    public function testShouldNotFinishWhenTransactionIsNotCreatedInDatabase()
     {
         $this->expectException(CreateTransferException::class);
         $this->expectExceptionMessage('An error occurred while inserting transfer data on database');
 
-        $userRepo = $this->createMock(UserRepository::class);
-
-        $transactionRepo = $this->createMock(TransactionRepository::class);
-        $transactionRepo->method('create')->willReturn(null);
+        $this->transactionRepo->method('create')->willReturn(null);
 
         $createTransferService = new CreateTransferService(
-            $transactionRepo,
-            $userRepo
+            $this->transactionRepo,
+            $this->userRepo
         );
 
         /** @var CreateTransferServiceInterface*/
-        $createTransferService->handle($payer, $payee, $value);
+        $createTransferService->handle($this->payee->id, $this->payer->id, 10);
     }
 
     /** 
      * @test 
-     * @dataProvider serviceParametersDataProvider
      */
-    public function testShouldNotFinishWhenSubtractUserBalanceFail($payer, $payee, $value)
+    public function testShouldNotFinishWhenSubtractUserBalanceFail()
     {
         $this->expectException(CreateTransferException::class);
         $this->expectExceptionMessage('The user has no balance to proceed');
 
-        $transactionRepo = $this->createMock(TransactionRepositoryInterface::class);
         $transactionFake = Transaction::create([
-            'payee_id' => $payee,
-            'payer_id' => $payer,
-            'value' => $value
+            'payee_id' => $this->payee->id,
+            'payer_id' => $this->payer->id,
+            'value' => 10
         ]);
-        $transactionRepo->method('create')->willReturn($transactionFake);
 
-        $userRepo = $this->createMock(UserRepositoryInterface::class);
-        $userRepo->method('subtractBalance')->willReturn(false);
+        $this->transactionRepo->method('create')->willReturn($transactionFake);
+        $this->userRepo->method('subtractBalance')->willReturn(false);
 
         $createTransferService = new CreateTransferService(
-            $transactionRepo,
-            $userRepo
+            $this->transactionRepo,
+            $this->userRepo
         );
 
         /** @var CreateTransferServiceInterface*/
-        $createTransferService->handle($payer, $payee, $value);
+        $createTransferService->handle($this->payee->id, $this->payer->id, 10);
     }
 }
