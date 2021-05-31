@@ -32,11 +32,13 @@ class CreateTransferServiceTest extends TestCase
 
         $this->payer = \App\Models\User\User::factory()->create([
             'is_seller' => false,
-            'balance' => 1000
+            'balance' => 1000,
+            'active' => true
         ]);
 
         $this->payee = \App\Models\User\User::factory()->create([
-            'is_seller' => true
+            'is_seller' => true,
+            'active' => true
         ]);
     }
 
