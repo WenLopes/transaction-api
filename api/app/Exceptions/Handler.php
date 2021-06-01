@@ -31,7 +31,9 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $mappedExceptions = [
-        /** Transfer exceptions */
+        /** Transaction exceptions */
+        'App\Exceptions\Transaction\NotFoundTransactionException',
+
         'App\Exceptions\Transaction\Transfer\CreateTransferException',
         'App\Exceptions\Transaction\Transfer\CompleteTransferException',
         'App\Exceptions\Transaction\Transfer\RollbackTransferException',
