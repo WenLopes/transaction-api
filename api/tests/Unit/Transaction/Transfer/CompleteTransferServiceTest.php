@@ -4,6 +4,7 @@ namespace Tests\Unit\Transaction\Transfer;
 
 use App\Events\Transaction\Transfer\TransferSuccess;
 use App\Exceptions\Transaction\Transfer\CompleteTransferException;
+use App\Models\Transaction\Transaction;
 use App\Models\User\User;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -16,8 +17,8 @@ class CompleteTransferServiceTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $userRepo;    
-    private $transactionRepo;
+    private $mockUserRepo;    
+    private $mockTransactionRepo;
     private $payer;
     private $payee;
     private $transaction;
@@ -26,22 +27,22 @@ class CompleteTransferServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->userRepo = $this->createMock(UserRepositoryInterface::class);
+        $this->mockUserRepo = $this->createMock(UserRepositoryInterface::class);
 
-        $this->transactionRepo = $this->createMock(TransactionRepositoryInterface::class);
+        $this->mockTransactionRepo = $this->createMock(TransactionRepositoryInterface::class);
 
-        $this->payer = \App\Models\User\User::factory()->create([
+        $this->payer = User::factory()->create([
             'is_seller' => false,
             'balance' => 1000,
             'active' => true
         ]);
 
-        $this->payee = \App\Models\User\User::factory()->create([
+        $this->payee = User::factory()->create([
             'is_seller' => true,
             'active' => true
         ]);
 
-        $this->transaction = \App\Models\Transaction\Transaction::factory()->create([
+        $this->transaction = Transaction::factory()->create([
             'payer_id'  => $this->payer->id,
             'payee_id'  => $this->payee->id,
             'value'     => 100,
@@ -57,11 +58,11 @@ class CompleteTransferServiceTest extends TestCase
         $this->expectException(CompleteTransferException::class);
         $this->expectExceptionMessage("Error setting transaction status as complete");
 
-        $this->transactionRepo->method('setAsSuccess')->willReturn(false);
+        $this->mockTransactionRepo->method('setAsSuccess')->willReturn(false);
 
         $completeTransferService = new CompleteTransferService(
-            $this->transactionRepo,
-            $this->userRepo
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
         );
 
         $completeTransferService->handle($this->transaction->id);
@@ -75,13 +76,13 @@ class CompleteTransferServiceTest extends TestCase
         $this->expectException(CompleteTransferException::class);
         $this->expectExceptionMessage("Error adding value to payee balance");
 
-        $this->transactionRepo->method('setAsSuccess')->willReturn(true);
-        $this->transactionRepo->method('findById')->willReturn( $this->transaction );
-        $this->userRepo->method('addBalance')->willReturn(false);
+        $this->mockTransactionRepo->method('setAsSuccess')->willReturn(true);
+        $this->mockTransactionRepo->method('findById')->willReturn( $this->transaction );
+        $this->mockUserRepo->method('addBalance')->willReturn(false);
 
         $completeTransferService = new CompleteTransferService(
-            $this->transactionRepo,
-            $this->userRepo
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
         );
 
         $completeTransferService->handle($this->transaction->id);
@@ -94,17 +95,35 @@ class CompleteTransferServiceTest extends TestCase
     {
         Event::fake();
 
-        $this->transactionRepo->method('setAsSuccess')->willReturn(true);
-        $this->transactionRepo->method('findById')->willReturn( $this->transaction );
-        $this->userRepo->method('addBalance')->willReturn(true);
+        $this->mockTransactionRepo->method('setAsSuccess')->willReturn(true);
+        $this->mockTransactionRepo->method('findById')->willReturn( $this->transaction );
+        $this->mockUserRepo->method('addBalance')->willReturn(true);
 
         $completeTransferService = new CompleteTransferService(
-            $this->transactionRepo,
-            $this->userRepo
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
         );
 
         $completeTransferService->handle($this->transaction->id);
 
         Event::assertDispatched(TransferSuccess::class);
+    }
+    
+    /**
+     * @test
+     */
+    public function test_payee_should_receive_transaction_value()
+    {
+        $oldPayeeBalance = $this->payee->balance;
+
+        /** @var CompleteTransferService */
+        $completeTransferService = app(CompleteTransferService::class);
+        $completeTransferService->handle($this->transaction->id);
+
+        $this->assertNotEquals($oldPayeeBalance, $this->payee->fresh()->balance);
+        $this->assertEquals( 
+            ($oldPayeeBalance + $this->transaction->value), 
+            $this->payee->fresh()->balance
+        );
     }
 }
