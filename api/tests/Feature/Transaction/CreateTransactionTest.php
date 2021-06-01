@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class CreateTransferTest extends TestCase
+class CreateTransactionTest extends TestCase
 {
     use DatabaseTransactions;
 
