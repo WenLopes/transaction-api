@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Transaction\Transfer;
+namespace Tests\Unit\Services\Transaction\Transfer;
 
 use App\Exceptions\Transaction\Transfer\CreateTransferException;
 use App\Jobs\Transaction\Transfer\ProcessTransferJob;
