@@ -17,8 +17,8 @@ class CreateTransferServiceTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $userRepo;    
-    private $transactionRepo;
+    private $mockUserRepo;    
+    private $mockTransactionRepo;
     private $payer;
     private $payee;
 
@@ -26,9 +26,9 @@ class CreateTransferServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->userRepo = $this->createMock(UserRepositoryInterface::class);
+        $this->mockUserRepo = $this->createMock(UserRepositoryInterface::class);
 
-        $this->transactionRepo = $this->createMock(TransactionRepositoryInterface::class);
+        $this->mockTransactionRepo = $this->createMock(TransactionRepositoryInterface::class);
 
         $this->payer = \App\Models\User\User::factory()->create([
             'is_seller' => false,
@@ -50,11 +50,11 @@ class CreateTransferServiceTest extends TestCase
         $this->expectException(CreateTransferException::class);
         $this->expectExceptionMessage('An error occurred while inserting transfer data on database');
 
-        $this->transactionRepo->method('create')->willReturn(null);
+        $this->mockTransactionRepo->method('create')->willReturn(null);
 
         $createTransferService = new CreateTransferService(
-            $this->transactionRepo,
-            $this->userRepo
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
         );
 
         /** @var CreateTransferServiceInterface*/
@@ -64,12 +64,12 @@ class CreateTransferServiceTest extends TestCase
     /** 
      * @test 
      */
-    public function test_should_not_finish_when_subtract_user_balance_fail()
+    public function test_should_not_finish_when_subtract_payer_balance_fail()
     {
         $this->expectException(CreateTransferException::class);
         $this->expectExceptionMessage('The user has no balance to proceed');
 
-        $this->transactionRepo->method('create')->willReturn(
+        $this->mockTransactionRepo->method('create')->willReturn(
             Transaction::create([
                 'payee_id' => $this->payee->id,
                 'payer_id' => $this->payer->id,
@@ -77,11 +77,11 @@ class CreateTransferServiceTest extends TestCase
             ])
         );
 
-        $this->userRepo->method('subtractBalance')->willReturn(false);
+        $this->mockUserRepo->method('subtractBalance')->willReturn(false);
 
         $createTransferService = new CreateTransferService(
-            $this->transactionRepo,
-            $this->userRepo
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
         );
 
         /** @var CreateTransferServiceInterface*/
@@ -94,18 +94,18 @@ class CreateTransferServiceTest extends TestCase
     public function test_should_create_transfer_job_process_when_finished()
     {
         Queue::fake();
-        $this->transactionRepo->method('create')->willReturn(
+        $this->mockTransactionRepo->method('create')->willReturn(
             Transaction::create([
                 'payee_id' => $this->payee->id,
                 'payer_id' => $this->payer->id,
                 'value' => 10
             ])
         );
-        $this->userRepo->method('subtractBalance')->willReturn(true);
+        $this->mockUserRepo->method('subtractBalance')->willReturn(true);
 
         $createTransferService = new CreateTransferService(
-            $this->transactionRepo,
-            $this->userRepo
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
         );
 
         /** @var CreateTransferServiceInterface*/
@@ -116,9 +116,27 @@ class CreateTransferServiceTest extends TestCase
     /**
      * @test
      */
+    public function test_payer_should_be_have_transfer_value_debited_from_his_balance()
+    {
+        $oldPayerBalance = $this->payer->balance;
+
+        /** @var CreateTransferService */
+        $createTransferService = app(CreateTransferService::class);
+        $transaction = $createTransferService->handle($this->payee->id, $this->payer->id, 10);
+
+        $this->assertNotEquals($oldPayerBalance, $this->payer->fresh()->balance);
+        $this->assertEquals( 
+            ($oldPayerBalance - $transaction->value), 
+            $this->payer->fresh()->balance
+        );
+    }
+
+    /**
+     * @test
+     */
     public function test_should_return_valid_transaction_when_finished()
     {
-        $this->transactionRepo->method('create')->willReturn(
+        $this->mockTransactionRepo->method('create')->willReturn(
             Transaction::create([
                 'payee_id' => $this->payee->id,
                 'payer_id' => $this->payer->id,
@@ -126,11 +144,11 @@ class CreateTransferServiceTest extends TestCase
             ])
         );
 
-        $this->userRepo->method('subtractBalance')->willReturn(true);
+        $this->mockUserRepo->method('subtractBalance')->willReturn(true);
 
         $createTransferService = new CreateTransferService(
-            $this->transactionRepo,
-            $this->userRepo
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
         );
 
         /** @var CreateTransferServiceInterface*/
@@ -139,5 +157,16 @@ class CreateTransferServiceTest extends TestCase
         $this->assertEquals(10, $transaction->value);
         $this->assertEquals($this->payee->id, $transaction->payee_id);
         $this->assertEquals($this->payer->id, $transaction->payer_id);
+    }
+
+    /**
+     * @test
+     */
+    public function test_should_return_transaction_model_when_finished()
+    {
+        /** @var CreateTransferService */
+        $createTransferService = app(CreateTransferService::class);
+        $transaction = $createTransferService->handle($this->payee->id, $this->payer->id, 10);
+        $this->assertInstanceOf(Transaction::class, $transaction);
     }
 }
