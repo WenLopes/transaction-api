@@ -71,7 +71,7 @@ class CompleteTransferServiceTest extends TestCase
     /**
     * @test
     */
-    public function test_should_not_finish_when_transaction_value_is_added_to_the_payee_balance()
+    public function test_should_not_finish_when_transaction_value_is_not_added_to_the_payee_balance()
     {
         $this->expectException(CompleteTransferException::class);
         $this->expectExceptionMessage("Error adding value to payee balance");
@@ -91,7 +91,7 @@ class CompleteTransferServiceTest extends TestCase
     /**
      * @test
      */
-    public function test_should_event_be_dispatched_when_finished()
+    public function test_transfer_success_event_should_be_triggered()
     {
         Event::fake();
 
