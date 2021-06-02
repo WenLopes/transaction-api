@@ -38,6 +38,10 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
 
         $successStatus = config('constants.transaction.status.SUCCESS');
 
+        if( $transaction->transaction_status_id == $successStatus ){
+            return false;
+        }
+
         return $this->update($transactionId, [
             'transaction_status_id' => $successStatus
         ]);
@@ -58,6 +62,10 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
         }
 
         $errorStatus = config('constants.transaction.status.ERROR');
+
+        if( $transaction->transaction_status_id == $errorStatus ){
+            return false;
+        }
 
         return $this->update($transactionId, [
             'transaction_status_id' => $errorStatus
