@@ -24,7 +24,7 @@ class RollbackTransferService implements RollbackTransferServiceInterface {
         $this->userRepo = $userRepo;
     }
 
-    public function handle(Transaction $transaction) : bool
+    public function rollbackTransfer(Transaction $transaction) : bool
     {
         try {
 
