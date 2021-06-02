@@ -46,7 +46,7 @@ class RollbackTransferServiceTest extends TestCase
             'payer_id'  => $this->payer->id,
             'payee_id'  => $this->payee->id,
             'value'     => 100,
-            'transaction_status_id' => 1
+            'transaction_status_id' => config('constants.transaction.status.WAITING')
         ]);
     }
 

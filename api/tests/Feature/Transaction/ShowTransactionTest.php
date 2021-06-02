@@ -30,7 +30,7 @@ class ShowTransactionTest extends TestCase
             'payer_id'  => $payer->id,
             'payee_id'  => $payee->id,
             'value'     => 10,
-            'transaction_status_id' => 1
+            'transaction_status_id' => config('constants.transaction.status.WAITING')
         ]);
 
         $response = $this->get("api/transaction/{$transaction->id}");
