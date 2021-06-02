@@ -21,4 +21,12 @@ class Transaction extends Model
         'transaction_status_id',
         'processed_at'
     ];
+
+    /**
+     * Returns if transaction has already been processed
+     */
+    public function alreadyProcessed() : bool
+    {
+        return $this->transaction_status_id !== config('constants.transaction.status.WAITING');
+    }
 }

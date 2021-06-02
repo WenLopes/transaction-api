@@ -28,25 +28,16 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
      * @param int $transactionId
      * @return bool
      */
-    public function setAsSuccess( int $transactionId ) : bool {
-
-        $transaction = $this->findById($transactionId);
-
-        if( !$transaction ){
-            return false;
+    public function setAsSuccess( int $transactionId ) : bool 
+    {
+        try {
+            return $this->update($transactionId, [
+                'transaction_status_id' => config('constants.transaction.status.SUCCESS'),
+                'processed_at' => now()
+            ]);
+        } catch (\Exception $e){
+            throw new \Exception("Error setting transaction status as complete: ". $e->getMessage());
         }
-
-        $successStatus = config('constants.transaction.status.SUCCESS');
-
-        if( $transaction->transaction_status_id == $successStatus ){
-            return false;
-        }
-
-        return $this->update($transactionId, [
-            'transaction_status_id' => $successStatus,
-            'processed_at' => now()
-        ]);
-
     }
 
     /**
