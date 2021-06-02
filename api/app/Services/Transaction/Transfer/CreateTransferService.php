@@ -46,7 +46,7 @@ class CreateTransferService implements CreateTransferServiceInterface {
                 throw new \Exception("The user has no balance to proceed");
             }
 
-            dispatch( new ProcessTransferJob($transaction->id) );
+            dispatch( new ProcessTransferJob($transaction) );
 
             \DB::commit();
 
