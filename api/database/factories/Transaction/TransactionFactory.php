@@ -23,10 +23,14 @@ class TransactionFactory extends Factory
     public function definition()
     {
         return [
-            'payer_id' => 1,
-            'payee_id' => 2,
+            'payer_id' => function(){
+                return User::factory()->create(['is_seller' => false])->id;
+            },
+            'payee_id' => function(){
+                return User::factory()->create()->id;
+            },
             'value' => 0.1,
-            'transaction_status_id' => 1
+            'transaction_status_id' => config('constants.transaction.status.WAITING')
         ];
     }
 }
