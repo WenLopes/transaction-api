@@ -50,6 +50,34 @@ class TransactionRepositoryTest extends TestCase
 
     }
 
+    public function setAsErrorDataProvider() {
+
+        $this->refreshApplication();
+
+        $transactionWaiting = Transaction::factory()->create();
+
+        $transactionError = Transaction::factory()->create([
+            'transaction_status_id' => config('constants.transaction.status.ERROR')
+        ]);
+
+        return [
+            'invalid_transaction' => [ 
+                'transactionId' => intval(INF),
+                'expected' => false
+            ],
+
+            'transaction_in_waiting_status' => [ 
+                'transactionId' => $transactionWaiting->id,
+                'expected' => true
+            ],
+
+            'transaction_in_error_status' => [ 
+                'transactionId' => $transactionError->id,
+                'expected' => false
+            ]
+        ];
+    }
+
     /**
      * @test
      * @dataProvider setAsSuccessDataProvider
@@ -57,6 +85,16 @@ class TransactionRepositoryTest extends TestCase
     public function test_set_transaction_as_success(int $transactionId, bool $expected)
     {
         $query = $this->transactionRepo->setAsSuccess($transactionId);
+        $this->assertEquals($expected, $query);
+    }
+
+    /**
+     * @test
+     * @dataProvider setAsErrorDataProvider
+     */
+    public function test_set_transaction_as_error(int $transactionId, bool $expected)
+    {
+        $query = $this->transactionRepo->setAsError($transactionId);
         $this->assertEquals($expected, $query);
     }
 }
