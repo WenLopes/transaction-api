@@ -65,7 +65,7 @@ class CompleteTransferServiceTest extends TestCase
             $this->mockUserRepo
         );
 
-        $completeTransferService->handle($this->transaction->id);
+        $completeTransferService->handle($this->transaction);
     }
 
     /**
@@ -85,7 +85,7 @@ class CompleteTransferServiceTest extends TestCase
             $this->mockUserRepo
         );
 
-        $completeTransferService->handle($this->transaction->id);
+        $completeTransferService->handle($this->transaction);
     }
 
     /**
@@ -104,7 +104,7 @@ class CompleteTransferServiceTest extends TestCase
             $this->mockUserRepo
         );
 
-        $completeTransferService->handle($this->transaction->id);
+        $completeTransferService->handle($this->transaction);
 
         Event::assertDispatched(TransferSuccess::class);
     }
@@ -118,7 +118,7 @@ class CompleteTransferServiceTest extends TestCase
 
         /** @var CompleteTransferService */
         $completeTransferService = app(CompleteTransferService::class);
-        $completeTransferService->handle($this->transaction->id);
+        $completeTransferService->handle($this->transaction);
 
         $this->assertNotEquals($oldPayeeBalance, $this->payee->fresh()->balance);
         $this->assertEquals( 
