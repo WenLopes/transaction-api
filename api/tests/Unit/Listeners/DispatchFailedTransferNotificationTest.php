@@ -14,6 +14,10 @@ class DispatchFailedTransferNotificationTest extends TestCase {
 
     use DatabaseTransactions;
 
+    protected function setUp() : void
+    {
+        parent::setUp();
+    }
     /**
      * @test
      */

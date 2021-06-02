@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use App\Models\Transaction\Transaction;
 use App\Models\User\User;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ShowTransactionTest extends TestCase
 {
+    use DatabaseTransactions;
 
     /**
      * @test

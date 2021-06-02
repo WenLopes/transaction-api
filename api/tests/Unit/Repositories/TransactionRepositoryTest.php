@@ -20,81 +20,48 @@ class TransactionRepositoryTest extends TestCase
         $this->transactionRepo = app(TransactionRepository::class);
     }
 
-    public function setAsSuccessDataProvider() {
-
-        $this->refreshApplication();
-
-        $transactionWaiting = Transaction::factory()->create();
-
+    /**
+     * @test
+     */
+    public function test_status_should_not_set_as_success_when_transaction_is_already_successful()
+    {
         $transactionSuccess = Transaction::factory()->create([
             'transaction_status_id' => config('constants.transaction.status.SUCCESS')
         ]);
 
-        return [
-
-            'invalid_transaction' => [ 
-                'transactionId' => intval(INF),
-                'expected' => false
-            ],
-
-            'transaction_in_waiting_status' => [ 
-                'transactionId' => $transactionWaiting->id,
-                'expected' => true
-            ],
-
-            'transaction_in_success_status' => [ 
-                'transactionId' => $transactionSuccess->id,
-                'expected' => false
-            ]
-        ];
-
+        $query = $this->transactionRepo->setAsSuccess($transactionSuccess->id);
+        $this->assertEquals(false, $query);
     }
 
-    public function setAsErrorDataProvider() {
-
-        $this->refreshApplication();
-
+    /**
+     * @test
+     */
+    public function test_status_should_be_success_when_transaction_is_waiting()
+    {
         $transactionWaiting = Transaction::factory()->create();
+        $query = $this->transactionRepo->setAsSuccess($transactionWaiting->id);
+        $this->assertEquals(true, $query);
+    }
 
+    /**
+     * @test
+     */
+    public function test_status_should_not_set_as_error_when_transaction_is_already_error()
+    {
         $transactionError = Transaction::factory()->create([
             'transaction_status_id' => config('constants.transaction.status.ERROR')
         ]);
-
-        return [
-            'invalid_transaction' => [ 
-                'transactionId' => intval(INF),
-                'expected' => false
-            ],
-
-            'transaction_in_waiting_status' => [ 
-                'transactionId' => $transactionWaiting->id,
-                'expected' => true
-            ],
-
-            'transaction_in_error_status' => [ 
-                'transactionId' => $transactionError->id,
-                'expected' => false
-            ]
-        ];
+        
+        $query = $this->transactionRepo->setAsError($transactionError->id);
+        $this->assertEquals(false, $query);
     }
 
     /**
      * @test
-     * @dataProvider setAsSuccessDataProvider
      */
-    public function test_set_transaction_as_success(int $transactionId, bool $expected)
-    {
-        $query = $this->transactionRepo->setAsSuccess($transactionId);
-        $this->assertEquals($expected, $query);
-    }
-
-    /**
-     * @test
-     * @dataProvider setAsErrorDataProvider
-     */
-    public function test_set_transaction_as_error(int $transactionId, bool $expected)
-    {
-        $query = $this->transactionRepo->setAsError($transactionId);
-        $this->assertEquals($expected, $query);
+    public function test_status_should_be_error_when_transaction_is_waiting(){
+        $transactionWaiting = Transaction::factory()->create();
+        $query = $this->transactionRepo->setAsError($transactionWaiting->id);
+        $this->assertEquals(true, $query);
     }
 }
