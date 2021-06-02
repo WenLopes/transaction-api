@@ -3,17 +3,19 @@
 namespace App\Exceptions\Transaction;
 
 use App\Exceptions\BaseException;
-use App\Exceptions\BaseExceptionInterface;
+use Illuminate\Http\JsonResponse;
 
 class NotFoundTransactionException extends BaseException {
     
+    protected $notFoundCode = JsonResponse::HTTP_NOT_FOUND;
+
     /**
      * Exception code
      * @return int
      */
     public function httpCode(): int
     {
-        return 404;
+        return $this->notFoundCode;
     }
 
     public function message() : string
