@@ -24,7 +24,7 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
         $this->userRepo = $userRepo;
     }
 
-    public function handle(Transaction $transaction) : bool
+    public function completeTransfer(Transaction $transaction) : bool
     {
         try {
 
