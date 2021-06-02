@@ -48,6 +48,7 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
         } catch (\Exception $e){
             
             \DB::rollback();
+            /** chamar rollback ? */
             throw new CompleteTransferException($e->getMessage());
 
         }

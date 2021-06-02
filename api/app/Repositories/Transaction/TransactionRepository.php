@@ -43,7 +43,8 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
         }
 
         return $this->update($transactionId, [
-            'transaction_status_id' => $successStatus
+            'transaction_status_id' => $successStatus,
+            'processed_at' => now()
         ]);
 
     }
@@ -68,7 +69,8 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
         }
 
         return $this->update($transactionId, [
-            'transaction_status_id' => $errorStatus
+            'transaction_status_id' => $errorStatus,
+            'processed_at' => now()
         ]);
     }
 }
