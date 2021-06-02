@@ -37,7 +37,7 @@ class TransactionController extends Controller
             'value' => $value
         ] = $payload;
 
-        $transaction = $createTransferService->handle($payeeId, $payerId, $value);
+        $transaction = $createTransferService->createTransfer($payeeId, $payerId, $value);
         return response()->json( new TransactionResource($transaction) );
     }
 }
