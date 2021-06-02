@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Listeners;
 
-use App\Events\Transaction\Transfer\TransferSuccess;
+use App\Events\Transaction\Transfer\TransferFailed;
 use App\Jobs\Notification\SendNotificationJob;
 use App\Listeners\Transaction\Transfer\DispatchFailedTransferNotification;
 use App\Models\Transaction\Transaction;
@@ -25,13 +25,18 @@ class DispatchFailedTransferNotificationTest extends TestCase {
             'transaction_status_id' => config('constants.transaction.status.ERROR')
         ]);
 
-        $event = $this->createMock(TransferSuccess::class);
+        $event = $this->createMock(TransferFailed::class);
         $event->method('getTransaction')->willReturn($transactionError);
 
         /** @var DispatchFailedTransferNotification */        
         $listener = app(DispatchFailedTransferNotification::class);
         $listener->handle($event);
-
+        
+        $this->assertDatabaseHas('notifications', [
+            'user_id' => $transactionError->payer_id,
+            'subject' => 'Error while transferring',
+            'notification_status_id' => config('constants.notification.status.WAITING')
+        ]);
         Queue::assertPushed(SendNotificationJob::class);
     }
 }
