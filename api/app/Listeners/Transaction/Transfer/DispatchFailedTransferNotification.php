@@ -56,7 +56,7 @@ class DispatchFailedTransferNotification
                     "But don't worry, the amount will be sent will be credited to your balance.";
 
         $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
-        dispatch( new SendNotificationJob($notification->id) );
+        dispatch( new SendNotificationJob($notification) );
     }
 
     /**

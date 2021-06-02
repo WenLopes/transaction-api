@@ -22,17 +22,17 @@ class SendNotificationJob implements ShouldQueue
     /** @var int */
     public $maxExceptions = 5;
 
-    /** @var int */
-    public $notificationId;
+    /** @var Notification */
+    public $notification;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(int $notificationId)
+    public function __construct(Notification $notification)
     {
-        $this->notificationId = $notificationId;
+        $this->notification = $notification;
     }
 
     /**
@@ -42,7 +42,7 @@ class SendNotificationJob implements ShouldQueue
      */
     public function handle( NotificationServiceInterface $notificationService ) : bool
     {
-        return $notificationService->send( $this->notificationId );
+        return $notificationService->send( $this->notification );
     }
 
     /**
