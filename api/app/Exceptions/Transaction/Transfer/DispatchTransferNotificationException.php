@@ -5,7 +5,7 @@ namespace App\Exceptions\Transaction\Transfer;
 use App\Exceptions\BaseException;
 use App\Exceptions\BaseExceptionInterface;
 
-class DispatchTransferNotificationException extends BaseException implements BaseExceptionInterface {
+class DispatchTransferNotificationException extends BaseException {
     
     public function message() : string
     {

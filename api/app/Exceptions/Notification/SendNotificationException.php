@@ -5,7 +5,7 @@ namespace App\Exceptions\Notification;
 use App\Exceptions\BaseException;
 use App\Exceptions\BaseExceptionInterface;
 
-class SendNotificationException extends BaseException implements BaseExceptionInterface {
+class SendNotificationException extends BaseException {
     
     public function message() : string
     {

@@ -5,7 +5,7 @@ namespace App\Exceptions\Transaction\Transfer;
 use App\Exceptions\BaseException;
 use App\Exceptions\BaseExceptionInterface;
 
-class ProcessTransferJobException extends BaseException implements BaseExceptionInterface {
+class ProcessTransferJobException extends BaseException {
     
     public function message() : string
     {

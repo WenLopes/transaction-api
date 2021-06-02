@@ -5,7 +5,7 @@ namespace App\Exceptions\Transaction\Authorization;
 use App\Exceptions\BaseException;
 use App\Exceptions\BaseExceptionInterface;
 
-class CheckAuthorizationException extends BaseException implements BaseExceptionInterface {
+class CheckAuthorizationException extends BaseException {
     
     public function message() : string
     {

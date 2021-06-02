@@ -3,9 +3,8 @@
 namespace App\Exceptions\Transaction\Transfer;
 
 use App\Exceptions\BaseException;
-use App\Exceptions\BaseExceptionInterface;
 
-class CompleteTransferException extends BaseException implements BaseExceptionInterface {
+class CompleteTransferException extends BaseException  {
     
     public function message() : string
     {

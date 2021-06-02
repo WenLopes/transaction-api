@@ -5,7 +5,7 @@ namespace App\Exceptions\Transaction\Transfer;
 use App\Exceptions\BaseException;
 use App\Exceptions\BaseExceptionInterface;
 
-class RollbackTransferException extends BaseException implements BaseExceptionInterface {
+class RollbackTransferException extends BaseException {
     
     public function message() : string
     {
