@@ -31,7 +31,9 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $mappedExceptions = [
-        /** Transfer exceptions */
+        /** Transaction exceptions */
+        'App\Exceptions\Transaction\NotFoundTransactionException',
+
         'App\Exceptions\Transaction\Transfer\CreateTransferException',
         'App\Exceptions\Transaction\Transfer\CompleteTransferException',
         'App\Exceptions\Transaction\Transfer\RollbackTransferException',
@@ -51,6 +53,8 @@ class Handler extends ExceptionHandler
             $this->renderable(function (\Exception $e ) {
 
                 $exception = $this->getExceptionInstance($e);
+
+                $exception->log();
 
                 return response()->json([
                     'message' => $exception->message()

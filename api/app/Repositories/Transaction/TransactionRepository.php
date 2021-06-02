@@ -28,7 +28,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
      * @param int $transactionId
      * @return bool
      */
-    public function setAsComplete( int $transactionId ) : bool {
+    public function setAsSuccess( int $transactionId ) : bool {
 
         $transaction = $this->findById($transactionId);
 
@@ -38,9 +38,15 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
 
         $successStatus = config('constants.transaction.status.SUCCESS');
 
+        if( $transaction->transaction_status_id == $successStatus ){
+            return false;
+        }
+
         return $this->update($transactionId, [
-            'transaction_status_id' => $successStatus
+            'transaction_status_id' => $successStatus,
+            'processed_at' => now()
         ]);
+
     }
 
     /**
@@ -48,7 +54,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
      * @param int $transactionId
      * @return bool
      */
-    public function setAsFailed( int $transactionId ) : bool {
+    public function setAsError( int $transactionId ) : bool {
 
         $transaction = $this->findById($transactionId);
 
@@ -58,8 +64,13 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
 
         $errorStatus = config('constants.transaction.status.ERROR');
 
+        if( $transaction->transaction_status_id == $errorStatus ){
+            return false;
+        }
+
         return $this->update($transactionId, [
-            'transaction_status_id' => $errorStatus
+            'transaction_status_id' => $errorStatus,
+            'processed_at' => now()
         ]);
     }
 }

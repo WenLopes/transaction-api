@@ -2,13 +2,13 @@
 
 namespace App\Jobs\Transaction\Transfer;
 
+use App\Exceptions\Transaction\Transfer\ProcessTransferJobException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Transaction\Transaction;
 use App\Services\Transaction\Authorization\AuthorizationServiceInterface;
 use App\Services\Transaction\Transfer\CompleteTransferServiceInterface;
 use App\Services\Transaction\Transfer\RollbackTransferServiceInterface;
@@ -18,22 +18,22 @@ class ProcessTransferJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /** @var int */
-    public $tries = 5;
+    public $tries = 3;
 
     /** @var int */
-    public $maxExceptions = 5;
+    public $maxExceptions = 3;
 
-    /** @var Transaction */
-    public $transaction;
+    /** @var int */
+    public $transactionId;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Transaction $transaction)
+    public function __construct(int $transactionId)
     {
-        $this->transaction = $transaction;
+        $this->transactionId = $transactionId;
     }
 
     /**
@@ -47,18 +47,11 @@ class ProcessTransferJob implements ShouldQueue
         RollbackTransferServiceInterface $rollbackTransferService
     ) : bool
     {
-        try {
-
-            if( $authorizationService->authorized() ){
-                $completeTransferService->handle( $this->transaction );
-                return true;
-            }
-
-            $rollbackTransferService->handle($this->transaction);
-            return true;
-
-        } catch (\Exception $e){
+        if( $authorizationService->authorized() ){
+            return $completeTransferService->handle( $this->transactionId );
         }
+
+        return $rollbackTransferService->handle( $this->transactionId );
     }
 
     /**
@@ -69,5 +62,6 @@ class ProcessTransferJob implements ShouldQueue
      */
     public function failed(\Exception $e)
     {
+        throw new ProcessTransferJobException($e->getMessage());
     }
 }

@@ -24,6 +24,12 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Transaction\TransactionRepositoryInterface::class, 
             \App\Repositories\Transaction\TransactionRepository::class
         );
+
+        /** NotificationRepo */
+        $this->app->bind( 
+            \App\Repositories\Notification\NotificationRepositoryInterface::class, 
+            \App\Repositories\Notification\NotificationRepository::class
+        );
     }
 
     /**

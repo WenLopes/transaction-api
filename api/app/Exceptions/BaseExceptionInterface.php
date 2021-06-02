@@ -23,6 +23,12 @@ interface BaseExceptionInterface {
     public function httpCode() : int;
 
     /**
+     * log exception
+     * @return int
+     */
+    public function log() : void;
+
+    /**
      * Exception Message
      * @return string
      */

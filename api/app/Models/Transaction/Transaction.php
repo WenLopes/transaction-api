@@ -18,6 +18,7 @@ class Transaction extends Model
         'payee_id',
         'payer_id',
         'value',
-        'transaction_status_id'
+        'transaction_status_id',
+        'processed_at'
     ];
 }

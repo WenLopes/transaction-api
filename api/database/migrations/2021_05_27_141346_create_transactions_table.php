@@ -17,10 +17,11 @@ class CreateTransactionsTable extends Migration
 
         Schema::create('transactions', function (Blueprint $table) use ($defaultTransactionStatus){
             $table->id();
-            $table->unsignedBigInteger('payee_id')->index('FK_Transactions_PayeeId_Users_Idx');
-            $table->unsignedBigInteger('payer_id')->index('FK_Transactions_PayerId_Users_Idx');
+            $table->unsignedBigInteger('payee_id')->index('fk_transactions_payee_id_users_id_idx');
+            $table->unsignedBigInteger('payer_id')->index('fk_transactions_payer_id_users_id_idx');
             $table->unsignedDecimal('value', 18, 2)->default(0);
-            $table->integer('transaction_status_id')->default($defaultTransactionStatus)->index('FK_Transactions_TransactionStatusId_TransactionStatus_Idx');
+            $table->integer('transaction_status_id')->default($defaultTransactionStatus)->index('fk_transactions_transaction_status_id_idx');
+            $table->dateTime('processed_at')->nullable();
             $table->timestamps();
         });
     }

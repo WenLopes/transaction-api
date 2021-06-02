@@ -36,14 +36,17 @@ class CreateTransferService implements CreateTransferServiceInterface {
         try {
 
             \DB::beginTransaction();
-            
+
             $transaction = $this->createTransaction($payeeId, $payerId, $value);
+            if(!$transaction){
+                throw new \Exception("An error occurred while inserting transfer data on database");
+            }
             
             if( ! $this->userRepo->subtractBalance($transaction->payer_id, $transaction->value) ){
                 throw new \Exception("The user has no balance to proceed");
             }
 
-            dispatch( new ProcessTransferJob($transaction) );
+            dispatch( new ProcessTransferJob($transaction->id) );
 
             \DB::commit();
 
@@ -64,7 +67,7 @@ class CreateTransferService implements CreateTransferServiceInterface {
      * @var float $value
      * @return Transaction
      */
-    protected function createTransaction(int $payee, int $payer, float $value) : Transaction
+    protected function createTransaction(int $payee, int $payer, float $value) : ?Transaction
     {
         return $this->transactionRepo->create([
             'payee_id' => $payee,

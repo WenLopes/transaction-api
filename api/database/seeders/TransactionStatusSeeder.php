@@ -19,8 +19,10 @@ class TransactionStatusSeeder extends Seeder
 
         foreach($allStatus as $description => $id){
             \DB::table('transaction_status')->insert([
-                'id' => $id,
-                'description' => $description
+                'id'          => $id,
+                'description' => $description,
+                'created_at'  => now(),
+                'updated_at'  => now()
             ]);
         }
 
