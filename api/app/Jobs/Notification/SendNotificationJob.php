@@ -42,7 +42,7 @@ class SendNotificationJob implements ShouldQueue
      */
     public function handle( NotificationServiceInterface $notificationService ) : bool
     {
-        return $notificationService->send( $this->notification );
+        return $notificationService->send( $this->notification->fresh() );
     }
 
     /**
