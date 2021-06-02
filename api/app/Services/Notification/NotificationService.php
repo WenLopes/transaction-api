@@ -23,12 +23,12 @@ class NotificationService implements NotificationServiceInterface {
         $this->notificationRepo = $notificationRepo;
     }
 
-    public function send(int $notificationId) : bool
+    public function send(Notification $notification) : bool
     {
         try {
             \DB::beginTransaction();
 
-            $dispatchNotification = $this->notificationRepo->setAsDispatched($notificationId);
+            $dispatchNotification = $this->notificationRepo->setAsDispatched($notification->id);
 
             if( ! $dispatchNotification ){
                 throw new \Exception("Error setting notification status as dispatched");
@@ -51,7 +51,7 @@ class NotificationService implements NotificationServiceInterface {
         } catch (\Exception $e) {
 
             \DB::rollback();
-            $this->notificationRepo->setAsError($notificationId);
+            $this->notificationRepo->setAsError($notification->id);
             throw new SendNotificationException($e->getMessage());
 
         }
