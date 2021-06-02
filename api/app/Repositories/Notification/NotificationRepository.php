@@ -39,7 +39,8 @@ class NotificationRepository extends BaseRepository implements NotificationRepos
         $dispatchedStatus = config('constants.notification.status.DISPATCHED');
 
         $query = $this->update($notificationId, [
-            'notification_status_id' => $dispatchedStatus
+            'notification_status_id' => $dispatchedStatus,
+            'processed_at' => now()
         ]);
 
         if( !$query ){
@@ -65,7 +66,8 @@ class NotificationRepository extends BaseRepository implements NotificationRepos
         $errorStatus = config('constants.notification.status.ERROR');
 
         $query = $this->update($notificationId, [
-            'notification_status_id' => $errorStatus
+            'notification_status_id' => $errorStatus,
+            'processed_at' => now()
         ]);
 
         if( !$query ){

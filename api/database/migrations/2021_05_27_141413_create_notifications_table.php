@@ -21,6 +21,7 @@ class CreateNotificationsTable extends Migration
             $table->integer('notification_status_id')->default($defaultNotificationStatus)->index('fk_notifications_notification_status_id_idx');
             $table->string('subject');
             $table->longText('content');
+            $table->dateTime('processed_at')->nullable();
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ class Notification extends Model
         'notification_status_id',
         'subject',
         'content',
-        'dispatched'
+        'dispatched',
+        'processed_at'
     ];
 }
