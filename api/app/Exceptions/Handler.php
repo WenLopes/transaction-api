@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Generic\GenericException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -27,22 +28,6 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * List of mapped exceptions
-     * @var array
-     */
-    protected $mappedExceptions = [
-        /** Transaction exceptions */
-        'App\Exceptions\Transaction\NotFoundTransactionException',
-
-        'App\Exceptions\Transaction\Transfer\CreateTransferException',
-        'App\Exceptions\Transaction\Transfer\CompleteTransferException',
-        'App\Exceptions\Transaction\Transfer\RollbackTransferException',
-        
-        /** Authorization exceptions */
-        'App\Exceptions\Transaction\Authorization\CheckAuthorizationException'
-    ];
-
-    /**
      * Register the exception handling callbacks for the application.
      *
      * @return void
@@ -52,32 +37,13 @@ class Handler extends ExceptionHandler
         if (!config('app.debug')) {
             $this->renderable(function (\Exception $e ) {
 
-                $exception = $this->getExceptionInstance($e);
-
-                $exception->log();
-
+                $exception = new GenericException($e->getMessage());
+                $exception->report();
                 return response()->json([
                     'message' => $exception->message()
                 ], $exception->httpCode());
 
             });
         }
-    }
-
-    /**
-     * Get exception instance from mapped exceptions
-     * @var \Exception $e 
-     * @return BaseExceptionInterface
-     */
-    protected function getExceptionInstance(\Exception $e) : BaseExceptionInterface
-    {
-        if( in_array(get_class($e), $this->mappedExceptions) ){
-            $exception_class_name = get_class($e);
-            $exception = new $exception_class_name($e->getMessage());
-            if( $exception instanceof BaseExceptionInterface ){
-                return $exception;
-            }
-        }
-        return new \App\Exceptions\Generic\GenericException($e->getMessage());
     }
 }

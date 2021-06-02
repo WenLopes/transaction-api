@@ -5,7 +5,7 @@ namespace App\Exceptions\Transaction;
 use App\Exceptions\BaseException;
 use App\Exceptions\BaseExceptionInterface;
 
-class NotFoundTransactionException extends BaseException implements BaseExceptionInterface {
+class NotFoundTransactionException extends BaseException {
     
     /**
      * Exception code
