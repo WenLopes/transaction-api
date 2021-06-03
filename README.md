@@ -144,6 +144,7 @@ docker exec -it php_transaction /bin/bash
 
 ```bash
 php artisan queue:work
+```
 
 ### Payload
 
