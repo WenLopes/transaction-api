@@ -162,7 +162,7 @@ No diretório **docs**, contém arquivos para importação nos API clients [Inso
 
 ## Executando testes
 
-Na **raiz do projeto**, execute o comando:
+Para execução dos testes, execute o comando:
 
 ```bash
 docker exec php_transaction vendor/bin/phpunit
@@ -173,6 +173,7 @@ docker exec php_transaction vendor/bin/phpunit
 * [Laravel 8](https://laravel.com/docs/8.x/releases)
 * [Docker](https://www.docker.com/)
 * [Clean code](https://github.com/jupeter/clean-code-php)
+* [Code sniffer](https://github.com/squizlabs/PHP_CodeSniffer)
 * [L5 Swagger](https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&-Configuration)
 * [Insomnia API CLient](https://insomnia.rest/download)
 * [Postman API CLient](https://www.postman.com/)
