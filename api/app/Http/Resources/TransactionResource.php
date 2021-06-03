@@ -28,13 +28,13 @@ class TransactionResource extends JsonResource
      * Get payee data
      * @return array
      */
-    protected function getPayeeData() : array
+    protected function getPayeeData(): array
     {
         $payee = [
             'id' => $this->payee_id
         ];
 
-        if( isset($this->payee) ){
+        if (isset($this->payee)) {
             $payee = [
                 'id' => $this->payee->id,
                 'name' => $this->payee->name,
@@ -49,13 +49,13 @@ class TransactionResource extends JsonResource
      * Get payer data
      * @return array
      */
-    protected function getPayerData() : array
+    protected function getPayerData(): array
     {
         $payer = [
             'id' => $this->payer_id
         ];
 
-        if( isset($this->payer) ){
+        if (isset($this->payer)) {
             $payer = [
                 'id' => $this->payer->id,
                 'name' => $this->payer->name,
@@ -70,13 +70,13 @@ class TransactionResource extends JsonResource
      * Get payer data
      * @return array
      */
-    protected function getStatusData() : array
+    protected function getStatusData(): array
     {
         $status = [
             'id' => $this->transaction_status_id
         ];
 
-        if( isset($this->status) ){
+        if (isset($this->status)) {
             $status = [
                 'id' => $this->status->id,
                 'description' => $this->status->description

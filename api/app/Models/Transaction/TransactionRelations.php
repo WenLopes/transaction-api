@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 namespace App\Models\Transaction;
 
-trait TransactionRelations {
+trait TransactionRelations
+{
 
     public function payer()
     {

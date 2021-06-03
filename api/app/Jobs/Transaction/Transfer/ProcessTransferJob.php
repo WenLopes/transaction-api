@@ -17,7 +17,10 @@ use App\Services\Transaction\Transfer\RollbackTransferServiceInterface;
 
 class ProcessTransferJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /** @var int */
     public $tries = 3;
@@ -47,13 +50,12 @@ class ProcessTransferJob implements ShouldQueue
         AuthorizationServiceInterface $authorizationService,
         CompleteTransferServiceInterface $completeTransfer,
         RollbackTransferServiceInterface $rollbackTransfer
-    ) : bool
-    {
-        if( $authorizationService->authorized() ){
-            return $completeTransfer->handleCompleteTransfer( $this->transaction->fresh() );
+    ): bool {
+        if ($authorizationService->authorized()) {
+            return $completeTransfer->handleCompleteTransfer($this->transaction->fresh());
         }
 
-        return $rollbackTransfer->handleRollbackTransfer( $this->transaction->fresh() );
+        return $rollbackTransfer->handleRollbackTransfer($this->transaction->fresh());
     }
 
     /**
@@ -64,7 +66,7 @@ class ProcessTransferJob implements ShouldQueue
      */
     public function failed(\Exception $exception)
     {
-        event( new ProcessTransferFailed($this->transaction->fresh()) );
+        event(new ProcessTransferFailed($this->transaction->fresh()));
         throw new ProcessTransferJobException($exception->getMessage());
     }
 }

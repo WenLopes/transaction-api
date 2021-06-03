@@ -28,11 +28,11 @@ class RollbackTransferOnProcessFailed
      * @param ProcessTransferFailed $event
      * @return void
      */
-    public function handle($event) : void
+    public function handle($event): void
     {
         try {
             $this->rollbackTransfer->handleRollbackTransfer($event->getTransaction());
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new RollbackTransferOnProcessFailedException($e->getMessage());
         }
     }

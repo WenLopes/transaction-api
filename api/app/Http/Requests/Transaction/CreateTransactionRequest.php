@@ -25,7 +25,7 @@ class CreateTransactionRequest extends BaseFormRequest
     {
         return [
             'value' => [
-                'required', 
+                'required',
                 'numeric',
                 'min:0.01'
             ],

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
-    use HasFactory, NotificationRelations;
+    use HasFactory;
+    use NotificationRelations;
 
     /**
      * The attributes that are mass assignable.

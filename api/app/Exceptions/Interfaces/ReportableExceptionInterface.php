@@ -1,18 +1,19 @@
-<?php 
+<?php
 
 namespace App\Exceptions\Interfaces;
 
-interface ReportableExceptionInterface {
+interface ReportableExceptionInterface
+{
 
     /**
      * Exception Technical Message
      * @return string
      */
-    public function exceptionMessage() : string;
+    public function exceptionMessage(): string;
 
     /**
      * Report exception
      * @return void
      */
-    public function report() : void;
+    public function report(): void;
 }

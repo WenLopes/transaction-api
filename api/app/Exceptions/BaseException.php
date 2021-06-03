@@ -7,11 +7,11 @@ use App\Exceptions\Interfaces\ReportableExceptionInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
-abstract class BaseException extends \Exception implements 
+abstract class BaseException extends \Exception implements
     RenderableExceptionInterface,
-    ReportableExceptionInterface 
+    ReportableExceptionInterface
 {
-    
+
     protected $fatalErrorCode = JsonResponse::HTTP_INTERNAL_SERVER_ERROR;
 
     /**
@@ -27,7 +27,7 @@ abstract class BaseException extends \Exception implements
      * Report exception
      * @return void
      */
-    public function report() : void
+    public function report(): void
     {
         $exception = get_class($this);
         Log::channel('exception')->error("Exception: {$exception} | Message: {$this->exceptionMessage()}");
@@ -47,7 +47,7 @@ abstract class BaseException extends \Exception implements
      */
     public function render()
     {
-        if( ! config('app.debug') ){
+        if (! config('app.debug')) {
             return response()->json(['message' => $this->message() ], $this->httpCode());
         }
     }

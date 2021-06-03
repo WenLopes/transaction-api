@@ -23,7 +23,7 @@ class ViewTransactionRequest extends BaseFormRequest
      */
     public function rules()
     {
-        return [            
+        return [
             'transaction' => [
                 'bail',
                 'integer',
@@ -34,7 +34,7 @@ class ViewTransactionRequest extends BaseFormRequest
 
     /**
      * Add parameters to be validated
-     * 
+     *
      * @return array
      */
     public function all($keys = null)

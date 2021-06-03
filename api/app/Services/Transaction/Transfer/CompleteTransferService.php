@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Services\Transaction\Transfer;
 
@@ -10,7 +10,8 @@ use App\Repositories\User\UserRepositoryInterface;
 use DB;
 use Exception;
 
-final class CompleteTransferService implements CompleteTransferServiceInterface {
+final class CompleteTransferService implements CompleteTransferServiceInterface
+{
 
     /** @var TransactionRepositoryInterface */
     protected $transactionRepo;
@@ -26,36 +27,31 @@ final class CompleteTransferService implements CompleteTransferServiceInterface 
         $this->userRepo = $userRepo;
     }
 
-    public function handleCompleteTransfer(Transaction $transaction) : bool
+    public function handleCompleteTransfer(Transaction $transaction): bool
     {
         try {
-
             DB::beginTransaction();
 
-            if( $transaction->alreadyProcessed() ) {
+            if ($transaction->alreadyProcessed()) {
                 return false;
             }
 
-            if( ! $this->transactionRepo->setAsSuccess($transaction->id) ){
+            if (! $this->transactionRepo->setAsSuccess($transaction->id)) {
                 throw new Exception("Error setting transaction status as complete");
             }
 
-            if( ! $this->userRepo->addBalance($transaction->payee_id, $transaction->value) ){
+            if (! $this->userRepo->addBalance($transaction->payee_id, $transaction->value)) {
                 throw new Exception("Error adding value to payee balance");
             }
 
-            event( new TransferSuccess($transaction->fresh()) );
+            event(new TransferSuccess($transaction->fresh()));
 
             DB::commit();
 
             return true;
-
-        } catch (\Exception $e){
-            
+        } catch (\Exception $e) {
             DB::rollback();
             throw new CompleteTransferException($e->getMessage());
-
         }
     }
-
 }

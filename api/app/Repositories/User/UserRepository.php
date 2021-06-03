@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Repositories\User;
 
@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Repositories\BaseRepository;
 use Exception;
 
-class UserRepository extends BaseRepository implements UserRepositoryInterface {
+class UserRepository extends BaseRepository implements UserRepositoryInterface
+{
 
     /**
      * @var Model
@@ -42,23 +43,23 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
 
     /**
      * Add value to the user's balance
-     * @param 
+     * @param
      */
-    public function addBalance(int $userId, float $value) : bool
+    public function addBalance(int $userId, float $value): bool
     {
         $user = $this->findById($userId);
         return $this->update($userId, [
             'balance' => ($user->balance += $value)
         ]);
     }
-    
+
     /**
      * Substract value to the user's balance
      * @param int $userId
      * @param float $value
      * @return bool
      */
-    public function subtractBalance(int $userId, float $value) : bool
+    public function subtractBalance(int $userId, float $value): bool
     {
         $user = $this->findById($userId);
 

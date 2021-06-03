@@ -24,7 +24,7 @@ interface BaseRepositoryInterface
      * @param array $relations
      * @return Model
      */
-    public function findById( int $modelId, array $columns = ['*'], array $relations = [] ): ?Model;
+    public function findById(int $modelId, array $columns = ['*'], array $relations = []): ?Model;
 
     /**
      * Create a model.

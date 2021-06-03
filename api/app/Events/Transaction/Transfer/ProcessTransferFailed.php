@@ -13,7 +13,9 @@ use Illuminate\Queue\SerializesModels;
 
 class ProcessTransferFailed
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /** @var Transaction */
     private $transaction;
@@ -28,7 +30,7 @@ class ProcessTransferFailed
         $this->transaction = $transaction;
     }
 
-    public function getTransaction() : Transaction
+    public function getTransaction(): Transaction
     {
         return $this->transaction;
     }

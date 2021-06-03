@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 namespace App\Services\Transaction\Authorization;
 
-interface AuthorizationServiceInterface {
+interface AuthorizationServiceInterface
+{
 
     public function authorized(): bool;
-
 }

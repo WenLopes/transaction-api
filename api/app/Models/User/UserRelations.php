@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 namespace App\Models\User;
 
-trait UserRelations {
+trait UserRelations
+{
 
     public function paidTransactions()
     {
@@ -13,5 +14,4 @@ trait UserRelations {
     {
         return $this->hasMany(\App\Models\Transaction\Transaction::class, 'payee_id', 'id');
     }
-
 }
