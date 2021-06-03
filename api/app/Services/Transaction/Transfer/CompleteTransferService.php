@@ -42,7 +42,7 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
                 throw new \Exception("Error adding value to payee balance");
             }
 
-            event( new TransferSuccess($transaction) );
+            event( new TransferSuccess($transaction->fresh()) );
 
             \DB::commit();
 
