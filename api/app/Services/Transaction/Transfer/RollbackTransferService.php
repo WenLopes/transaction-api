@@ -33,7 +33,7 @@ final class RollbackTransferService implements RollbackTransferServiceInterface 
             DB::beginTransaction();
 
             if( $transaction->alreadyProcessed() ) {
-                throw new Exception("The transaction has already been processed previously");
+                return false;
             }
 
             if( ! $this->transactionRepo->setAsError($transaction->id) ){
