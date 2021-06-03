@@ -61,7 +61,7 @@ class TransactionController extends Controller
      */
     public function create(
         CreateTransactionRequest $request,
-        CreateTransferServiceInterface $createTransferService
+        CreateTransferServiceInterface $createTransfer
     ) {
         $payload = $request->validated();
 
@@ -71,7 +71,7 @@ class TransactionController extends Controller
             'value' => $value
         ] = $payload;
 
-        $transaction = $createTransferService->handleCreateTransfer($payeeId, $payerId, $value);
+        $transaction = $createTransfer->handleCreateTransfer($payeeId, $payerId, $value);
         return response()->json( new TransactionResource($transaction) );
     }
 }
