@@ -61,8 +61,8 @@ class ProcessTransferJob implements ShouldQueue
      * @param  \Exception  $exception
      * @return void
      */
-    public function failed(\Exception $e)
+    public function failed(\Exception $exception)
     {
-        throw new ProcessTransferJobException($e->getMessage());
+        throw new ProcessTransferJobException($exception->getMessage());
     }
 }

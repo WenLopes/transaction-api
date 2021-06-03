@@ -7,6 +7,8 @@ use App\Exceptions\Transaction\Transfer\RollbackTransferException;
 use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use DB;
+use Exception;
 
 class RollbackTransferService implements RollbackTransferServiceInterface {
 
@@ -28,29 +30,29 @@ class RollbackTransferService implements RollbackTransferServiceInterface {
     {
         try {
 
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             if( $transaction->alreadyProcessed() ) {
-                throw new \Exception("The transaction has already been processed previously");
+                throw new Exception("The transaction has already been processed previously");
             }
 
             if( ! $this->transactionRepo->setAsError($transaction->id) ){
-                throw new \Exception("Error setting transaction status as failed");
+                throw new Exception("Error setting transaction status as failed");
             }
 
             if( ! $this->userRepo->addBalance($transaction->payer_id, $transaction->value) ){
-                throw new \Exception("Error adding value to payer balance");
+                throw new Exception("Error adding value to payer balance");
             }
 
             event( new TransferFailed($transaction->fresh()) );
 
-            \DB::commit();
+            DB::commit();
 
             return true;
 
         } catch (\Exception $e){
             
-            \DB::rollback();
+            DB::rollback();
             throw new RollbackTransferException($e->getMessage());
 
         }

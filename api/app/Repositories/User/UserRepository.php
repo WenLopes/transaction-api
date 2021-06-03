@@ -5,6 +5,7 @@ namespace App\Repositories\User;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\BaseRepository;
+use Exception;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface {
 
@@ -62,7 +63,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
         $user = $this->findById($userId);
 
         if ($value > $user->balance) {
-            throw new \Exception('Value greater than available user balance');
+            throw new Exception('Value greater than available user balance');
         }
 
         return $this->update($userId, [

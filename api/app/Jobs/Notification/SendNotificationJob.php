@@ -51,8 +51,8 @@ class SendNotificationJob implements ShouldQueue
      * @param  \Exception  $exception
      * @return void
      */
-    public function failed(\Exception $e)
+    public function failed(\Exception $exception)
     {
-        throw new SendNotificationException($e->getMessage());
+        throw new SendNotificationException($exception->getMessage());
     }
 }

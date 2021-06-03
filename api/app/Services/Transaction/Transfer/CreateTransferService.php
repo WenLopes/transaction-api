@@ -7,6 +7,8 @@ use App\Jobs\Transaction\Transfer\ProcessTransferJob;
 use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use DB;
+use Exception;
 
 class CreateTransferService implements CreateTransferServiceInterface {
 
@@ -35,26 +37,26 @@ class CreateTransferService implements CreateTransferServiceInterface {
     {
         try {
 
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             $transaction = $this->createTransaction($payeeId, $payerId, $value);
             if(!$transaction){
-                throw new \Exception("An error occurred while inserting transfer data on database");
+                throw new Exception("An error occurred while inserting transfer data on database");
             }
             
             if( ! $this->userRepo->subtractBalance($transaction->payer_id, $transaction->value) ){
-                throw new \Exception("The user has no balance to proceed");
+                throw new Exception("The user has no balance to proceed");
             }
 
             dispatch( new ProcessTransferJob($transaction) );
 
-            \DB::commit();
+            DB::commit();
 
             return $transaction;
 
         } catch (\Exception $e) {
 
-            \DB::rollback();
+            DB::rollback();
             throw new CreateTransferException($e->getMessage());
 
         }

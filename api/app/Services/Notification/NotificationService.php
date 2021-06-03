@@ -7,6 +7,8 @@ use App\Models\Notification\Notification;
 use App\Repositories\Notification\NotificationRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
+use DB;
+use Exception;
 
 class NotificationService implements NotificationServiceInterface {
 
@@ -26,31 +28,31 @@ class NotificationService implements NotificationServiceInterface {
     public function send(Notification $notification) : bool
     {
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             $dispatchNotification = $this->notificationRepo->setAsDispatched($notification->id);
 
             if( ! $dispatchNotification ){
-                throw new \Exception("Error setting notification status as dispatched");
+                throw new Exception("Error setting notification status as dispatched");
             }
 
             $response = Http::get(self::URL);
 
             if( $response->status() !== JsonResponse::HTTP_OK){
-                throw new \Exception("Notification service response status is invalid");
+                throw new Exception("Notification service response status is invalid");
             }
 
             if( $response->json()['message'] != 'Success') {
-                throw new \Exception("Notification service response message is invalid");
+                throw new Exception("Notification service response message is invalid");
             }
             
-            \DB::commit();
+            DB::commit();
 
             return true;
 
         } catch (\Exception $e) {
 
-            \DB::rollback();
+            DB::rollback();
             $this->notificationRepo->setAsError($notification->id);
             throw new SendNotificationException($e->getMessage());
 

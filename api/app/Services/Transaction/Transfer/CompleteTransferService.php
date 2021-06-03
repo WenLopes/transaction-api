@@ -7,6 +7,8 @@ use App\Exceptions\Transaction\Transfer\CompleteTransferException;
 use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use DB;
+use Exception;
 
 class CompleteTransferService implements CompleteTransferServiceInterface {
 
@@ -28,29 +30,29 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
     {
         try {
 
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             if( $transaction->alreadyProcessed() ) {
-                throw new \Exception("The transaction has already been processed previously");
+                throw new Exception("The transaction has already been processed previously");
             }
 
             if( ! $this->transactionRepo->setAsSuccess($transaction->id) ){
-                throw new \Exception("Error setting transaction status as complete");
+                throw new Exception("Error setting transaction status as complete");
             }
 
             if( ! $this->userRepo->addBalance($transaction->payee_id, $transaction->value) ){
-                throw new \Exception("Error adding value to payee balance");
+                throw new Exception("Error adding value to payee balance");
             }
 
             event( new TransferSuccess($transaction->fresh()) );
 
-            \DB::commit();
+            DB::commit();
 
             return true;
 
         } catch (\Exception $e){
             
-            \DB::rollback();
+            DB::rollback();
             throw new CompleteTransferException($e->getMessage());
 
         }
