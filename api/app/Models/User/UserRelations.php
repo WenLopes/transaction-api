@@ -4,12 +4,12 @@ namespace App\Models\User;
 
 trait UserRelations {
 
-    public function paid_transactions()
+    public function paidTransactions()
     {
         return $this->hasMany(\App\Models\Transaction\Transaction::class, 'payer_id', 'id');
     }
 
-    public function received_transactions()
+    public function receivedTransactions()
     {
         return $this->hasMany(\App\Models\Transaction\Transaction::class, 'payee_id', 'id');
     }

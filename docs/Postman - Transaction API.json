@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "5dc9c366-8bb2-4d5f-a4c5-6557faac78d1",
+		"name": "Transaction API",
+		"description": "API for transaction control between users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Transaction",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/transaction/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"transaction",
+						"2"
+					]
+				},
+				"description": "Transaction get"
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"value\": 10.00,\n\t\"payer\": 1,\n\t\"payee\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/transaction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"transaction"
+					]
+				},
+				"description": "Transaction POST"
+			},
+			"response": []
+		}
+	]
+}

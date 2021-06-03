@@ -4,8 +4,11 @@ namespace App\Services\Transaction\Transfer;
 
 use App\Events\Transaction\Transfer\TransferSuccess;
 use App\Exceptions\Transaction\Transfer\CompleteTransferException;
+use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use DB;
+use Exception;
 
 class CompleteTransferService implements CompleteTransferServiceInterface {
 
@@ -23,32 +26,33 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
         $this->userRepo = $userRepo;
     }
 
-    public function handle(int $transactionId) : bool
+    public function completeTransfer(Transaction $transaction) : bool
     {
         try {
 
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
-            if( ! $this->transactionRepo->setAsSuccess($transactionId) ){
-                throw new \Exception("Error setting transaction status as complete");
+            if( $transaction->alreadyProcessed() ) {
+                throw new Exception("The transaction has already been processed previously");
             }
 
-            $transaction = $this->transactionRepo->findById($transactionId);
+            if( ! $this->transactionRepo->setAsSuccess($transaction->id) ){
+                throw new Exception("Error setting transaction status as complete");
+            }
 
             if( ! $this->userRepo->addBalance($transaction->payee_id, $transaction->value) ){
-                throw new \Exception("Error adding value to payee balance");
+                throw new Exception("Error adding value to payee balance");
             }
 
-            event( new TransferSuccess($transaction) );
+            event( new TransferSuccess($transaction->fresh()) );
 
-            \DB::commit();
+            DB::commit();
 
             return true;
 
         } catch (\Exception $e){
             
-            \DB::rollback();
-            /** chamar rollback ? */
+            DB::rollback();
             throw new CompleteTransferException($e->getMessage());
 
         }

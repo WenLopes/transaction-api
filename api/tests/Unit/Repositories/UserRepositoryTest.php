@@ -26,9 +26,9 @@ class UserRepositoryTest extends TestCase
     */
     public function test_should_not_create_users_with_duplicate_document()
     {
-        $randomString = "duplicate".strtotime(now());
         $this->expectException(QueryException::class);
         $this->expectExceptionMessageMatches("/UQ_Users_Document/i");
+        $randomString = "duplicate".strtotime(now());
 
         $originalUser = User::factory()->create();
         $this->userRepo->create([

@@ -4,8 +4,11 @@ namespace App\Services\Transaction\Transfer;
 
 use App\Events\Transaction\Transfer\TransferFailed;
 use App\Exceptions\Transaction\Transfer\RollbackTransferException;
+use App\Models\Transaction\Transaction;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use DB;
+use Exception;
 
 class RollbackTransferService implements RollbackTransferServiceInterface {
 
@@ -23,31 +26,33 @@ class RollbackTransferService implements RollbackTransferServiceInterface {
         $this->userRepo = $userRepo;
     }
 
-    public function handle(int $transactionId) : bool
+    public function rollbackTransfer(Transaction $transaction) : bool
     {
         try {
 
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
-            if( ! $this->transactionRepo->setAsError($transactionId) ){
-                throw new \Exception("Error setting transaction status as failed");
+            if( $transaction->alreadyProcessed() ) {
+                throw new Exception("The transaction has already been processed previously");
             }
 
-            $transaction = $this->transactionRepo->findById($transactionId);
+            if( ! $this->transactionRepo->setAsError($transaction->id) ){
+                throw new Exception("Error setting transaction status as failed");
+            }
 
             if( ! $this->userRepo->addBalance($transaction->payer_id, $transaction->value) ){
-                throw new \Exception("Error adding value to payer balance");
+                throw new Exception("Error adding value to payer balance");
             }
 
-            event( new TransferFailed($transaction) );
+            event( new TransferFailed($transaction->fresh()) );
 
-            \DB::commit();
+            DB::commit();
 
             return true;
 
         } catch (\Exception $e){
             
-            \DB::rollback();
+            DB::rollback();
             throw new RollbackTransferException($e->getMessage());
 
         }

@@ -55,7 +55,7 @@ class DispatchSuccessTransferNotification
         $subject = "Transfer successful!";
         $content = "Your transfer in the amount of R$ ".format_brl($transaction->value)." to {$transaction->payee->name} was successful";
         $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
-        dispatch( new SendNotificationJob($notification->id) );
+        dispatch( new SendNotificationJob($notification) );
     }
 
     /**
@@ -68,7 +68,7 @@ class DispatchSuccessTransferNotification
         $subject = "You received a transfer!";
         $content = "{$transaction->payer->name} made you a transfer in the amount of R$ ".format_brl($transaction->value);
         $notification = $this->createNotification( $transaction->payee_id, $subject, $content );
-        dispatch( new SendNotificationJob($notification->id) );
+        dispatch( new SendNotificationJob($notification) );
     }
 
     /**

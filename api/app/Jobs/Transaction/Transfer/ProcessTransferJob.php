@@ -3,6 +3,7 @@
 namespace App\Jobs\Transaction\Transfer;
 
 use App\Exceptions\Transaction\Transfer\ProcessTransferJobException;
+use App\Models\Transaction\Transaction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -23,17 +24,17 @@ class ProcessTransferJob implements ShouldQueue
     /** @var int */
     public $maxExceptions = 3;
 
-    /** @var int */
-    public $transactionId;
+    /** @var Transaction */
+    public $transaction;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(int $transactionId)
+    public function __construct(Transaction $transaction)
     {
-        $this->transactionId = $transactionId;
+        $this->transaction = $transaction;
     }
 
     /**
@@ -48,10 +49,10 @@ class ProcessTransferJob implements ShouldQueue
     ) : bool
     {
         if( $authorizationService->authorized() ){
-            return $completeTransferService->handle( $this->transactionId );
+            return $completeTransferService->completeTransfer( $this->transaction->fresh() );
         }
 
-        return $rollbackTransferService->handle( $this->transactionId );
+        return $rollbackTransferService->rollbackTransfer( $this->transaction->fresh() );
     }
 
     /**
@@ -60,8 +61,8 @@ class ProcessTransferJob implements ShouldQueue
      * @param  \Exception  $exception
      * @return void
      */
-    public function failed(\Exception $e)
+    public function failed(\Exception $exception)
     {
-        throw new ProcessTransferJobException($e->getMessage());
+        throw new ProcessTransferJobException($exception->getMessage());
     }
 }
