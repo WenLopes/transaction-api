@@ -19,6 +19,7 @@ class CreateTransferServiceTest extends TestCase
 
     private $mockUserRepo;    
     private $mockTransactionRepo;
+    private $genericUser;
     private $payer;
     private $payee;
 
@@ -29,6 +30,11 @@ class CreateTransferServiceTest extends TestCase
         $this->mockUserRepo = $this->createMock(UserRepositoryInterface::class);
 
         $this->mockTransactionRepo = $this->createMock(TransactionRepositoryInterface::class);
+
+        $this->genericUser = \App\Models\User\User::factory()->create([
+            'active' => true,
+            'balance' => 100
+        ]);
 
         $this->payer = \App\Models\User\User::factory()->create([
             'is_seller' => false,
@@ -59,6 +65,34 @@ class CreateTransferServiceTest extends TestCase
 
         /** @var CreateTransferServiceInterface*/
         $createTransferService->handleCreateTransfer($this->payee->id, $this->payer->id, 10);
+    }
+
+    /** 
+     * @test 
+     */
+    public function test_should_not_finish_if_payer_is_a_seller()
+    {
+        $this->expectException(CreateTransferException::class);
+        $this->expectExceptionMessage('The payer cannot be a seller');
+    
+        //Payee created on setUp is define as a seller
+        $sellerUserId = $this->payee->id;
+        $this->mockTransactionRepo->method('create')->willReturn(
+            Transaction::create([
+                'payee_id' => $this->genericUser->id,
+                'payer_id' => $sellerUserId,
+                'value' => 1
+            ])
+        );
+
+        $createTransferService = new CreateTransferService(
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
+        );
+
+
+        /** @var CreateTransferServiceInterface*/
+        $createTransferService->handleCreateTransfer($this->genericUser->id, $sellerUserId, 1);
     }
 
     /** 
