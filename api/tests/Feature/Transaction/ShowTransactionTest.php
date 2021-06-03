@@ -46,13 +46,9 @@ class ShowTransactionTest extends TestCase
     {
         $transactionInvalidId = intval(INF);
         $response = $this->get("api/transaction/$transactionInvalidId");
-        $response->assertStatus(422);
+        $response->assertStatus(404);
         $response->assertExactJson([
-            'errors' => [
-                'transaction' => [ 
-                    "The selected transaction is invalid."
-                ]
-            ]
+            'message' => 'Transaction not found'
         ]);
     }
 }
