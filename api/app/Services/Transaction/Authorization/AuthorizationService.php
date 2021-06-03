@@ -6,7 +6,7 @@ use App\Exceptions\Transaction\Authorization\CheckAuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
 
-class AuthorizationService implements AuthorizationServiceInterface{
+final class AuthorizationService implements AuthorizationServiceInterface{
 
     /** @var string */
     protected const URL = 'https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6';

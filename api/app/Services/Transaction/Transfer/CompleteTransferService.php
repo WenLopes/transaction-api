@@ -10,7 +10,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use DB;
 use Exception;
 
-class CompleteTransferService implements CompleteTransferServiceInterface {
+final class CompleteTransferService implements CompleteTransferServiceInterface {
 
     /** @var TransactionRepositoryInterface */
     protected $transactionRepo;
