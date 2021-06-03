@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Repositories\Transaction;
 
@@ -6,7 +6,8 @@ use App\Models\Transaction\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\BaseRepository;
 
-class TransactionRepository extends BaseRepository implements TransactionRepositoryInterface {
+class TransactionRepository extends BaseRepository implements TransactionRepositoryInterface
+{
 
     /**
      * @var Model
@@ -28,7 +29,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
      * @param int $transactionId
      * @return bool
      */
-    public function setAsSuccess( int $transactionId ) : bool 
+    public function setAsSuccess(int $transactionId): bool
     {
         return $this->update($transactionId, [
             'transaction_status_id' => config('constants.transaction.status.SUCCESS'),
@@ -41,7 +42,7 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
      * @param int $transactionId
      * @return bool
      */
-    public function setAsError( int $transactionId ) : bool 
+    public function setAsError(int $transactionId): bool
     {
         return $this->update($transactionId, [
             'transaction_status_id' => config('constants.transaction.status.ERROR'),

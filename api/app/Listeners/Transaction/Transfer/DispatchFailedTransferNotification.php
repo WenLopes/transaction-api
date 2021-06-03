@@ -33,15 +33,14 @@ class DispatchFailedTransferNotification
      * @param TransferSuccess $event
      * @return void
      */
-    public function handle($event) : void
+    public function handle($event): void
     {
         try {
             $transaction = $event->getTransaction();
             $this->dispatchToPayer($transaction);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new DispatchTransferNotificationException($e->getMessage());
         }
-
     }
 
     /**
@@ -49,14 +48,14 @@ class DispatchFailedTransferNotification
      * @var Transaction $transaction
      * @return void
      */
-    protected function dispatchToPayer(Transaction $transaction) : void
+    protected function dispatchToPayer(Transaction $transaction): void
     {
         $subject = "Error while transferring";
-        $content =  "An error occurred while making your transfer in the amount of ".format_brl($transaction->value)." to {$transaction->payee->name}. ". 
+        $content =  "An error occurred while making your transfer in the amount of " . format_brl($transaction->value) . " to {$transaction->payee->name}. " .
                     "But don't worry, the amount will be sent will be credited to your balance.";
 
-        $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
-        dispatch( new SendNotificationJob($notification) );
+        $notification = $this->createNotification($transaction->payer_id, $subject, $content);
+        dispatch(new SendNotificationJob($notification));
     }
 
     /**
@@ -70,8 +69,7 @@ class DispatchFailedTransferNotification
         int $userId,
         string $subject,
         string $content
-    ) : Notification
-    {
+    ): Notification {
         return $this->notificationRepo->create([
             'user_id' => $userId,
             'subject' => $subject,

@@ -1,27 +1,29 @@
-<?php 
+<?php
 
 namespace App\Http\Validators;
 
 use App\Repositories\User\UserRepositoryInterface;
 
-class UserNotSeller {
+class UserNotSeller
+{
 
     /** @var UserRepositoryInterface */
     protected $userRepo;
 
-    public function __construct(UserRepositoryInterface $userRepo) {
+    public function __construct(UserRepositoryInterface $userRepo)
+    {
         $this->userRepo = $userRepo;
     }
 
     public function passes($attribute, $value)
     {
-        $user = $this->userRepo->findById( $value );
+        $user = $this->userRepo->findById($value);
 
-        if(!$user){
+        if (!$user) {
             return false;
         }
 
-        if($user->is_seller){
+        if ($user->is_seller) {
             return false;
         }
 

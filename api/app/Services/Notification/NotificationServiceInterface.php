@@ -1,11 +1,11 @@
-<?php 
+<?php
 
 namespace App\Services\Notification;
 
 use App\Models\Notification\Notification;
 
-interface NotificationServiceInterface {
+interface NotificationServiceInterface
+{
 
     public function send(Notification $notification): bool;
-
 }

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    use HasFactory, TransactionRelations;
+    use HasFactory;
+    use TransactionRelations;
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +26,7 @@ class Transaction extends Model
     /**
      * Returns if transaction has already been processed
      */
-    public function alreadyProcessed() : bool
+    public function alreadyProcessed(): bool
     {
         return $this->transaction_status_id !== config('constants.transaction.status.WAITING');
     }

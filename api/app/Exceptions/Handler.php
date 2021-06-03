@@ -35,14 +35,13 @@ class Handler extends ExceptionHandler
     public function register()
     {
         if (!config('app.debug')) {
-            $this->renderable(function (\Exception $e ) {
+            $this->renderable(function (\Exception $e) {
 
                 $exception = new GenericException($e->getMessage());
                 $exception->report();
                 return response()->json([
                     'message' => $exception->message()
                 ], $exception->httpCode());
-
             });
         }
     }

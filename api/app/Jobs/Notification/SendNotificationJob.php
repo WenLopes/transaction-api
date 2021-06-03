@@ -14,7 +14,10 @@ use App\Exceptions\Notification\SendNotificationException;
 
 class SendNotificationJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /** @var int */
     public $tries = 5;
@@ -40,9 +43,9 @@ class SendNotificationJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle( NotificationServiceInterface $notificationService ) : bool
+    public function handle(NotificationServiceInterface $notificationService): bool
     {
-        return $notificationService->send( $this->notification->fresh() );
+        return $notificationService->send($this->notification->fresh());
     }
 
     /**

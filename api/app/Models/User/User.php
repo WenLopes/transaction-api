@@ -8,7 +8,10 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, UserRelations, UserScopes;
+    use HasFactory;
+    use Notifiable;
+    use UserRelations;
+    use UserScopes;
 
     protected $table = 'users';
 

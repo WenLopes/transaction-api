@@ -1,23 +1,25 @@
-<?php 
+<?php
 
 namespace App\Http\Validators;
 
 use App\Repositories\User\UserRepositoryInterface;
 
-class UserActive {
+class UserActive
+{
 
     /** @var UserRepositoryInterface */
     protected $userRepo;
 
-    public function __construct(UserRepositoryInterface $userRepo) {
+    public function __construct(UserRepositoryInterface $userRepo)
+    {
         $this->userRepo = $userRepo;
     }
 
-    public function passes($attribute, $value) : bool
+    public function passes($attribute, $value): bool
     {
-        $user = $this->userRepo->findById( $value );
+        $user = $this->userRepo->findById($value);
 
-        if(!$user){
+        if (!$user) {
             return false;
         }
 

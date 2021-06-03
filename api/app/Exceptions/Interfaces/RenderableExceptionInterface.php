@@ -1,14 +1,15 @@
-<?php 
+<?php
 
 namespace App\Exceptions\Interfaces;
 
-interface RenderableExceptionInterface {
+interface RenderableExceptionInterface
+{
 
     /**
      * Exception code
      * @return int
      */
-    public function httpCode() : int;
+    public function httpCode(): int;
 
     /**
      * Render exception
@@ -19,5 +20,5 @@ interface RenderableExceptionInterface {
      * Exception Message
      * @return string
      */
-    public function message() : string;
+    public function message(): string;
 }

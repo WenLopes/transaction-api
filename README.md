@@ -47,7 +47,7 @@ git clone https://github.com/WenLopes/transaction-api
 Na pasta Docker, crie o arquivo .env utilizando o .env.example como base. Modifique o valor das variáveis de acordo com a sua preferência.
 
 ```bash
-cp .env_example .env
+cp .env.example .env
 ```
 
 *Obs: As portas dos containers são customizáveis, então fique a vontade para modifica-las, porém certifique-se de utilizar as portas definidas em locais como o .env do laravel (conexão com o Mysql), clients do banco de dados (Workbench, por exemplo) e clients de API (Insomnia ou Postman, por exemplo)*
@@ -75,7 +75,7 @@ sudo chown -R www-data:www-data storage && sudo chown -R www-data:www-data boots
 4.3 Crie o arquivo .env do diretório **api**, utilizando o .env.example como base:
 
 ```bash
-cp .env_example .env
+cp .env.example .env
 ```
 
 

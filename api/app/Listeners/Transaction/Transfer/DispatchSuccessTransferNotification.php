@@ -33,16 +33,15 @@ class DispatchSuccessTransferNotification
      * @param TransferSuccess $event
      * @return void
      */
-    public function handle($event) : void
+    public function handle($event): void
     {
         try {
             $transaction = $event->getTransaction();
             $this->dispatchToPayer($transaction);
             $this->dispatchToPayee($transaction);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new DispatchTransferNotificationException($e->getMessage());
         }
-
     }
 
     /**
@@ -50,12 +49,12 @@ class DispatchSuccessTransferNotification
      * @var Transaction $transaction
      * @return void
      */
-    protected function dispatchToPayer(Transaction $transaction) : void
+    protected function dispatchToPayer(Transaction $transaction): void
     {
         $subject = "Transfer successful!";
-        $content = "Your transfer in the amount of R$ ".format_brl($transaction->value)." to {$transaction->payee->name} was successful";
-        $notification = $this->createNotification( $transaction->payer_id, $subject, $content );
-        dispatch( new SendNotificationJob($notification) );
+        $content = "Your transfer in the amount of R$ " . format_brl($transaction->value) . " to {$transaction->payee->name} was successful";
+        $notification = $this->createNotification($transaction->payer_id, $subject, $content);
+        dispatch(new SendNotificationJob($notification));
     }
 
     /**
@@ -63,12 +62,12 @@ class DispatchSuccessTransferNotification
      * @var Transaction $transaction
      * @return void
      */
-    protected function dispatchToPayee(Transaction $transaction) : void
+    protected function dispatchToPayee(Transaction $transaction): void
     {
         $subject = "You received a transfer!";
-        $content = "{$transaction->payer->name} made you a transfer in the amount of R$ ".format_brl($transaction->value);
-        $notification = $this->createNotification( $transaction->payee_id, $subject, $content );
-        dispatch( new SendNotificationJob($notification) );
+        $content = "{$transaction->payer->name} made you a transfer in the amount of R$ " . format_brl($transaction->value);
+        $notification = $this->createNotification($transaction->payee_id, $subject, $content);
+        dispatch(new SendNotificationJob($notification));
     }
 
     /**
@@ -82,8 +81,7 @@ class DispatchSuccessTransferNotification
         int $userId,
         string $subject,
         string $content
-    ) : Notification
-    {
+    ): Notification {
         return $this->notificationRepo->create([
             'user_id' => $userId,
             'subject' => $subject,

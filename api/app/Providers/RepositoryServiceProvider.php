@@ -14,20 +14,20 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         /** UserRepo */
-        $this->app->bind( 
-            \App\Repositories\User\UserRepositoryInterface::class, 
+        $this->app->bind(
+            \App\Repositories\User\UserRepositoryInterface::class,
             \App\Repositories\User\UserRepository::class
         );
 
         /** TransactionRepo */
-        $this->app->bind( 
-            \App\Repositories\Transaction\TransactionRepositoryInterface::class, 
+        $this->app->bind(
+            \App\Repositories\Transaction\TransactionRepositoryInterface::class,
             \App\Repositories\Transaction\TransactionRepository::class
         );
 
         /** NotificationRepo */
-        $this->app->bind( 
-            \App\Repositories\Notification\NotificationRepositoryInterface::class, 
+        $this->app->bind(
+            \App\Repositories\Notification\NotificationRepositoryInterface::class,
             \App\Repositories\Notification\NotificationRepository::class
         );
     }

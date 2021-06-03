@@ -51,9 +51,23 @@ class CompleteTransferServiceTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function test_should_not_complete_transfer_if_transaction_already_processed()
+    {
+        $transactionMock = $this->createMock(Transaction::class);
+        $transactionMock->method('alreadyProcessed')->willReturn(true);
+        $completeTransferService = new CompleteTransferService(
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
+        );
+        $this->assertFalse($completeTransferService->handleCompleteTransfer($transactionMock));
+    }
+
+    /**
     * @test
     */
-    public function test_should_not_finish_when_transaction_status_fail_to_change_to_success()
+    public function test_should_not_complete_transfer_when_transaction_status_fail_to_change_to_success()
     {
         $this->expectException(CompleteTransferException::class);
         $this->expectExceptionMessage("Error setting transaction status as complete");
@@ -71,7 +85,7 @@ class CompleteTransferServiceTest extends TestCase
     /**
     * @test
     */
-    public function test_should_not_finish_when_transaction_value_is_not_added_to_the_payee_balance()
+    public function test_should_not_complete_transfer_when_transaction_value_is_not_added_to_the_payee_balance()
     {
         $this->expectException(CompleteTransferException::class);
         $this->expectExceptionMessage("Error adding value to payee balance");
