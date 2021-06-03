@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 use DB;
 use Exception;
 
-class NotificationService implements NotificationServiceInterface {
+final class NotificationService implements NotificationServiceInterface {
 
     /** @var string */
     protected const URL = 'http://o4d9z.mocklab.io/notify';
@@ -30,9 +30,7 @@ class NotificationService implements NotificationServiceInterface {
         try {
             DB::beginTransaction();
 
-            $dispatchNotification = $this->notificationRepo->setAsDispatched($notification->id);
-
-            if( ! $dispatchNotification ){
+            if( ! $this->notificationRepo->setAsDispatched($notification->id) ){
                 throw new Exception("Error setting notification status as dispatched");
             }
 

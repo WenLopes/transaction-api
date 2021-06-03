@@ -10,7 +10,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use DB;
 use Exception;
 
-class CompleteTransferService implements CompleteTransferServiceInterface {
+final class CompleteTransferService implements CompleteTransferServiceInterface {
 
     /** @var TransactionRepositoryInterface */
     protected $transactionRepo;
@@ -26,7 +26,7 @@ class CompleteTransferService implements CompleteTransferServiceInterface {
         $this->userRepo = $userRepo;
     }
 
-    public function completeTransfer(Transaction $transaction) : bool
+    public function handleCompleteTransfer(Transaction $transaction) : bool
     {
         try {
 

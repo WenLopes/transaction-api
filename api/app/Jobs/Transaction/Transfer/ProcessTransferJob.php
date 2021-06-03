@@ -44,15 +44,15 @@ class ProcessTransferJob implements ShouldQueue
      */
     public function handle(
         AuthorizationServiceInterface $authorizationService,
-        CompleteTransferServiceInterface $completeTransferService,
-        RollbackTransferServiceInterface $rollbackTransferService
+        CompleteTransferServiceInterface $completeTransfer,
+        RollbackTransferServiceInterface $rollbackTransfer
     ) : bool
     {
         if( $authorizationService->authorized() ){
-            return $completeTransferService->completeTransfer( $this->transaction->fresh() );
+            return $completeTransfer->handleCompleteTransfer( $this->transaction->fresh() );
         }
 
-        return $rollbackTransferService->rollbackTransfer( $this->transaction->fresh() );
+        return $rollbackTransfer->handleRollbackTransfer( $this->transaction->fresh() );
     }
 
     /**

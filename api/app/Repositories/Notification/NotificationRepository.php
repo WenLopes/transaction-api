@@ -28,26 +28,11 @@ class NotificationRepository extends BaseRepository implements NotificationRepos
      * @param int $notificationId
      * @return bool
      */
-    public function setAsDispatched( int $notificationId ) : ?Notification {
-
-        $notification = $this->findById($notificationId);
-
-        if( !$notification ){
-            return false;
-        }
-
-        $dispatchedStatus = config('constants.notification.status.DISPATCHED');
-
-        $query = $this->update($notificationId, [
-            'notification_status_id' => $dispatchedStatus,
+    public function setAsDispatched( int $notificationId ) : bool {
+        return $this->update($notificationId, [
+            'notification_status_id' => config('constants.notification.status.DISPATCHED'),
             'processed_at' => now()
         ]);
-
-        if( !$query ){
-            return false;
-        }
-
-        return $this->findById($notificationId);
     }
 
     /**
@@ -55,25 +40,10 @@ class NotificationRepository extends BaseRepository implements NotificationRepos
      * @param int $notificationId
      * @return bool
      */
-    public function setAsError( int $notificationId ) : ?Notification {
-
-        $notification = $this->findById($notificationId);
-
-        if( !$notification ){
-            return false;
-        }
-
-        $errorStatus = config('constants.notification.status.ERROR');
-
-        $query = $this->update($notificationId, [
-            'notification_status_id' => $errorStatus,
+    public function setAsError( int $notificationId ) : bool {
+        return $this->update($notificationId, [
+            'notification_status_id' => config('constants.notification.status.ERROR'),
             'processed_at' => now()
         ]);
-
-        if( !$query ){
-            return false;
-        }
-
-        return $this->findById($notificationId);
     }
 }

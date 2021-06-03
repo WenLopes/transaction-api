@@ -58,7 +58,7 @@ class CreateTransferServiceTest extends TestCase
         );
 
         /** @var CreateTransferServiceInterface*/
-        $createTransferService->createTransfer($this->payee->id, $this->payer->id, 10);
+        $createTransferService->handleCreateTransfer($this->payee->id, $this->payer->id, 10);
     }
 
     /** 
@@ -85,7 +85,7 @@ class CreateTransferServiceTest extends TestCase
         );
 
         /** @var CreateTransferServiceInterface*/
-        $createTransferService->createTransfer($this->payee->id, $this->payer->id, 10);
+        $createTransferService->handleCreateTransfer($this->payee->id, $this->payer->id, 10);
     }
 
     /**
@@ -109,7 +109,7 @@ class CreateTransferServiceTest extends TestCase
         );
 
         /** @var CreateTransferServiceInterface*/
-        $createTransferService->createTransfer($this->payee->id, $this->payer->id, 10);
+        $createTransferService->handleCreateTransfer($this->payee->id, $this->payer->id, 10);
         Queue::assertPushed(ProcessTransferJob::class);
     }
 
@@ -122,7 +122,7 @@ class CreateTransferServiceTest extends TestCase
 
         /** @var CreateTransferService */
         $createTransferService = app(CreateTransferService::class);
-        $transaction = $createTransferService->createTransfer($this->payee->id, $this->payer->id, 10);
+        $transaction = $createTransferService->handleCreateTransfer($this->payee->id, $this->payer->id, 10);
 
         $this->assertNotEquals($oldPayerBalance, $this->payer->fresh()->balance);
         $this->assertEquals( 
@@ -152,7 +152,7 @@ class CreateTransferServiceTest extends TestCase
         );
 
         /** @var CreateTransferServiceInterface*/
-        $transaction = $createTransferService->createTransfer($this->payee->id, $this->payer->id, 10);
+        $transaction = $createTransferService->handleCreateTransfer($this->payee->id, $this->payer->id, 10);
 
         $this->assertEquals(10, $transaction->value);
         $this->assertEquals($this->payee->id, $transaction->payee_id);
@@ -166,7 +166,7 @@ class CreateTransferServiceTest extends TestCase
     {
         /** @var CreateTransferService */
         $createTransferService = app(CreateTransferService::class);
-        $transaction = $createTransferService->createTransfer($this->payee->id, $this->payer->id, 10);
+        $transaction = $createTransferService->handleCreateTransfer($this->payee->id, $this->payer->id, 10);
         $this->assertInstanceOf(Transaction::class, $transaction);
     }
 }

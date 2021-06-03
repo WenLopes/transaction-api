@@ -10,7 +10,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use DB;
 use Exception;
 
-class RollbackTransferService implements RollbackTransferServiceInterface {
+final class RollbackTransferService implements RollbackTransferServiceInterface {
 
     /** @var TransactionRepositoryInterface */
     protected $transactionRepo;
@@ -26,7 +26,7 @@ class RollbackTransferService implements RollbackTransferServiceInterface {
         $this->userRepo = $userRepo;
     }
 
-    public function rollbackTransfer(Transaction $transaction) : bool
+    public function handleRollbackTransfer(Transaction $transaction) : bool
     {
         try {
 

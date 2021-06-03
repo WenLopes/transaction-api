@@ -10,7 +10,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use DB;
 use Exception;
 
-class CreateTransferService implements CreateTransferServiceInterface {
+final class CreateTransferService implements CreateTransferServiceInterface {
 
     /** @var TransactionRepositoryInterface */
     protected $transactionRepo;
@@ -33,7 +33,7 @@ class CreateTransferService implements CreateTransferServiceInterface {
      * @var float $value
      * @return Transaction
     */
-    public function createTransfer(int $payeeId, int $payerId, float $value) : Transaction
+    public function handleCreateTransfer(int $payeeId, int $payerId, float $value) : Transaction
     {
         try {
 
@@ -69,7 +69,7 @@ class CreateTransferService implements CreateTransferServiceInterface {
      * @var float $value
      * @return Transaction
      */
-    protected function createTransaction(int $payee, int $payer, float $value) : ?Transaction
+    private function createTransaction(int $payee, int $payer, float $value) : ?Transaction
     {
         return $this->transactionRepo->create([
             'payee_id' => $payee,
