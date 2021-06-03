@@ -41,22 +41,10 @@ class TransactionRepository extends BaseRepository implements TransactionReposit
      * @param int $transactionId
      * @return bool
      */
-    public function setAsError( int $transactionId ) : bool {
-
-        $transaction = $this->findById($transactionId);
-
-        if( !$transaction ){
-            return false;
-        }
-
-        $errorStatus = config('constants.transaction.status.ERROR');
-
-        if( $transaction->transaction_status_id == $errorStatus ){
-            return false;
-        }
-
+    public function setAsError( int $transactionId ) : bool 
+    {
         return $this->update($transactionId, [
-            'transaction_status_id' => $errorStatus,
+            'transaction_status_id' => config('constants.transaction.status.ERROR'),
             'processed_at' => now()
         ]);
     }
