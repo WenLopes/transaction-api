@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Transaction\Transfer;
 
+use App\Events\Transaction\Transfer\ProcessTransferFailed;
 use App\Exceptions\Transaction\Transfer\ProcessTransferJobException;
 use App\Models\Transaction\Transaction;
 use Illuminate\Bus\Queueable;
@@ -63,6 +64,7 @@ class ProcessTransferJob implements ShouldQueue
      */
     public function failed(\Exception $exception)
     {
+        event( new ProcessTransferFailed($this->transaction->fresh()) );
         throw new ProcessTransferJobException($exception->getMessage());
     }
 }

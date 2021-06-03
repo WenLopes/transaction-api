@@ -25,7 +25,11 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Transaction\Transfer\TransferFailed::class => [
             \App\Listeners\Transaction\Transfer\DispatchFailedTransferNotification::class
-        ]
+        ],
+
+        \App\Events\Transaction\Transfer\ProcessTransferFailed::class => [
+            \App\Listeners\Transaction\Transfer\RollbackTransferOnProcessFailed::class
+        ],
     ];
 
     /**
