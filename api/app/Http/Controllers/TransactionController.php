@@ -42,6 +42,23 @@ class TransactionController extends Controller
         return response()->json( new TransactionResource($transaction) );
     }
 
+    /**     
+     * @OA\Post(
+     *     path="/api/transaction",
+     *     summary="Creating a transaction",
+     *     description="Creation of a transaction informing a valid payer, beneficiary and value",
+     *     operationId="transaction.create",
+     *     tags={"Transaction"},
+     * 
+     *     @OA\Parameter( name="value", description="Transaction value", in="query", required=true, @OA\Schema(type="number") ),
+     *     @OA\Parameter( name="payer", description="User payer identification", in="query", required=true, @OA\Schema(type="integer") ),
+     *     @OA\Parameter( name="payee", description="User payee identification", in="query", required=true, @OA\Schema(type="integer") ),
+     * 
+     *     @OA\Response(response="200", description="Returns transaction resource"),
+     *     @OA\Response(response="422", description="Request rules validation failed"),
+     *     @OA\Response(response="500", description="Transaction creation error")
+     * )
+     */
     public function create(
         CreateTransactionRequest $request,
         CreateTransferServiceInterface $createTransferService

@@ -37,6 +37,56 @@
                     }
                 }
             }
+        },
+        "/api/transaction": {
+            "post": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Creating a transaction",
+                "description": "Creation of a transaction informing a valid payer, beneficiary and value",
+                "operationId": "transaction.create",
+                "parameters": [
+                    {
+                        "name": "value",
+                        "in": "query",
+                        "description": "Transaction value",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "payer",
+                        "in": "query",
+                        "description": "User payer identification",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "payee",
+                        "in": "query",
+                        "description": "User payee identification",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns transaction resource"
+                    },
+                    "422": {
+                        "description": "Request rules validation failed"
+                    },
+                    "500": {
+                        "description": "Transaction creation error"
+                    }
+                }
+            }
         }
     },
     "security": [
