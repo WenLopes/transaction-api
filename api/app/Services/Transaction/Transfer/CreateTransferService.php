@@ -43,6 +43,10 @@ final class CreateTransferService implements CreateTransferServiceInterface {
             if(!$transaction){
                 throw new Exception("An error occurred while inserting transfer data on database");
             }
+
+            if( $transaction->payer->is_seller ){
+                throw new Exception("The payer cannot be a seller");
+            }
             
             if( ! $this->userRepo->subtractBalance($transaction->payer_id, $transaction->value) ){
                 throw new Exception("The user has no balance to proceed");
