@@ -56,7 +56,7 @@ class CompleteTransferServiceTest extends TestCase
     public function test_should_not_finish_when_transaction_status_fail_to_change_to_success()
     {
         $this->expectException(CompleteTransferException::class);
-        $this->expectExceptionMessageMatches("/Error setting transaction status as complete/i");
+        $this->expectExceptionMessage("Error setting transaction status as complete");
 
         $this->mockTransactionRepo->method('setAsSuccess')->willReturn(false);
 
