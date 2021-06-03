@@ -69,14 +69,8 @@ docker exec php_transaction composer install
 4.2 Corriga as permissões dos diretórios, executando os comandos abaixo no diretório **api**:
 
 ```bash
-sudo chgrp -R www-data storage bootstrap/cache
+sudo chown -R www-data:www-data storage && sudo chown -R www-data:www-data bootstrap/cache
 ```
-
-
-```bash
-sudo chmod -R ug+rwx storage bootstrap/cache
-```
-
 
 4.3 Crie o arquivo .env do diretório **api**, utilizando o .env.example como base:
 
@@ -85,7 +79,9 @@ cp .env_example .env
 ```
 
 
-***Obs:** Certifique-se de informar as portas definidas no .env do docker, nas variáveis de conexão com o banco de dados (DB_HOST, DB_PORT, etc...) e na variável **APP_URL** (porta definida no container NGINX)*
+***Obs:** Certique-se de preencher corretamente os valores contidos no .env do Laravel, usando como base o .env do Docker. Exemplo: configuração de DB_PORT, DB_USER e porta do APP_URL, devem ser iguais.*
+
+***Obs 2:** O valor da variável DB_HOST deve ser o mesmo do IP setado na configuração do container do Mysql, no arquivo docker-compose.yml. O valor padrão é 100.10.0.11*
 
 4.4 Gere a chave do projeto executando o comando na **raiz do projeto**:
 
@@ -124,6 +120,8 @@ Se preferir utilizar outro Client, informe as credenciais passadas no .env do Do
 
 
 ## Utilização
+
+Para auxilio na documentação da API, o pacote [L5-Swagger](https://github.com/DarkaOnLine/L5-Swagger) está instalado e configurado para ser acessado na url: http://localhost:{NGINX_PORT}/api/documentation. 
 
 ### Fluxo
 Antes de finalizar a transferência, um serviço autorizador deve ser consultado e posteriormente uma notificação deve ser enviada para o usuário, informando do sucesso/falha da execução.
