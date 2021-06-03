@@ -3,9 +3,8 @@
 namespace App\Exceptions\Generic;
 
 use App\Exceptions\BaseException;
-use App\Exceptions\BaseExceptionInterface;
 
-class GenericException extends BaseException implements BaseExceptionInterface {
+class GenericException extends BaseException {
 
     public function message() : string
     {
