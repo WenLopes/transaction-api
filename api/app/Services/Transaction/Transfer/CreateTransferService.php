@@ -33,7 +33,7 @@ class CreateTransferService implements CreateTransferServiceInterface {
      * @var float $value
      * @return Transaction
     */
-    public function createTransfer(int $payeeId, int $payerId, float $value) : Transaction
+    public function handleCreateTransfer(int $payeeId, int $payerId, float $value) : Transaction
     {
         try {
 

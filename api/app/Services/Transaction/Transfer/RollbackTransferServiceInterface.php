@@ -10,5 +10,5 @@ interface RollbackTransferServiceInterface {
      * Handle transfer rollback
      * @return bool
      */
-    public function rollbackTransfer(Transaction $transaction) : bool;
+    public function handleRollbackTransfer(Transaction $transaction) : bool;
 }

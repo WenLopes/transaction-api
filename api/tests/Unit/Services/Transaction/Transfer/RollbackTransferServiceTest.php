@@ -65,7 +65,7 @@ class RollbackTransferServiceTest extends TestCase
             $this->mockUserRepo
         );
 
-        $rollbackTransferService->rollbackTransfer($this->transaction);
+        $rollbackTransferService->handleRollbackTransfer($this->transaction);
     }
 
    /**
@@ -85,7 +85,7 @@ class RollbackTransferServiceTest extends TestCase
             $this->mockUserRepo
         );
 
-        $rollbackTransferService->rollbackTransfer($this->transaction);
+        $rollbackTransferService->handleRollbackTransfer($this->transaction);
     }
 
 
@@ -105,7 +105,7 @@ class RollbackTransferServiceTest extends TestCase
             $this->mockUserRepo
         );
 
-        $rollbackTransferService->rollbackTransfer($this->transaction);
+        $rollbackTransferService->handleRollbackTransfer($this->transaction);
 
         Event::assertDispatched(TransferFailed::class);
     }

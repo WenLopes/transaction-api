@@ -10,5 +10,5 @@ interface CompleteTransferServiceInterface {
      * Handle transfer completion
      * @return bool
      */
-    public function completeTransfer(Transaction $transaction) : bool;
+    public function handleCompleteTransfer(Transaction $transaction) : bool;
 }
