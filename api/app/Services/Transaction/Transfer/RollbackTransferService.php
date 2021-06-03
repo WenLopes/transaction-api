@@ -30,17 +30,19 @@ class RollbackTransferService implements RollbackTransferServiceInterface {
 
             \DB::beginTransaction();
 
+            if( $transaction->alreadyProcessed() ) {
+                throw new \Exception("The transaction has already been processed previously");
+            }
+
             if( ! $this->transactionRepo->setAsError($transaction->id) ){
                 throw new \Exception("Error setting transaction status as failed");
             }
-
-            $transaction = $this->transactionRepo->findById($transaction->id);
 
             if( ! $this->userRepo->addBalance($transaction->payer_id, $transaction->value) ){
                 throw new \Exception("Error adding value to payer balance");
             }
 
-            event( new TransferFailed($transaction) );
+            event( new TransferFailed($transaction->fresh()) );
 
             \DB::commit();
 
