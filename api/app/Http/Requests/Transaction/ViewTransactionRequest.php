@@ -4,7 +4,7 @@ namespace App\Http\Requests\Transaction;
 
 use App\Http\Requests\BaseFormRequest;
 
-class ShowTransactionRequest extends BaseFormRequest
+class ViewTransactionRequest extends BaseFormRequest
 {
     /**
      * Determine if the User is authorized to make this request.
