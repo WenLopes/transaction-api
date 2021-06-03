@@ -30,9 +30,7 @@ final class NotificationService implements NotificationServiceInterface {
         try {
             DB::beginTransaction();
 
-            $dispatchNotification = $this->notificationRepo->setAsDispatched($notification->id);
-
-            if( ! $dispatchNotification ){
+            if( ! $this->notificationRepo->setAsDispatched($notification->id) ){
                 throw new Exception("Error setting notification status as dispatched");
             }
 
