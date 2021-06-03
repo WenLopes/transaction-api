@@ -83,13 +83,13 @@ cp .env.example .env
 
 ***Obs 2:** O valor da variável DB_HOST deve ser o mesmo do IP setado na configuração do container do Mysql, no arquivo docker-compose.yml. O valor padrão é 100.10.0.11*
 
-4.4 Gere a chave do projeto executando o comando na **raiz do projeto**:
+4.4 Gere a chave do projeto executando o comando:
 
 ```bash
 docker exec php_transaction php artisan key:generate
 ```
 
-4.5 Rode as migrations e Seeders executando o comando na **raiz do projeto**:
+4.5 Rode as migrations e Seeders executando o comando:
 
 ```bash
 docker exec php_transaction php artisan migrate:refresh --seed
