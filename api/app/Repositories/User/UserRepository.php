@@ -46,15 +46,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
     public function addBalance(int $userId, float $value) : bool
     {
         $user = $this->findById($userId);
-
-        if( !$user ){
-            return false;
-        }
-
-        $newBalance = ($user->balance + $value);
-
         return $this->update($userId, [
-            'balance' => $newBalance
+            'balance' => ($user->balance += $value)
         ]);
     }
     
@@ -68,18 +61,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
     {
         $user = $this->findById($userId);
 
-        if( !$user ){
-            return false;
+        if ($value > $user->balance) {
+            throw new \Exception('Value greater than available user balance');
         }
-
-        if( $user->balance < $value ){
-            return false;
-        }
-
-        $newBalance = ($user->balance - $value);
 
         return $this->update($userId, [
-            'balance' => $newBalance
+            'balance' => ($user->balance -= $value)
         ]);
     }
 }

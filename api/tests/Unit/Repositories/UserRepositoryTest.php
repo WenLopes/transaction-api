@@ -55,4 +55,49 @@ class UserRepositoryTest extends TestCase
             'password' => 'password'
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function test_should_not_subtract_balance_if_the_value_is_greater_than_it()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Value greater than available user balance");
+        $user  = User::factory()->create([
+            'balance' => 100
+        ]);
+        $this->userRepo->subtractBalance($user->id, 1000);
+    }
+
+    /**
+     * @test
+     */
+    public function test_should_subtract_balance()
+    {
+        $user  = User::factory()->create([
+            'balance' => 1000
+        ]);
+
+        $this->assertTrue($this->userRepo->subtractBalance($user->id, 100));
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'balance' => 900
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_should_add_balance()
+    {
+        $user  = User::factory()->create([
+            'balance' => 100
+        ]);
+
+        $this->assertTrue($this->userRepo->addBalance($user->id, 100));
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'balance' => 200
+        ]);
+    }
 }
