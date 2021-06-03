@@ -16,7 +16,7 @@ class TransactionController extends Controller
      * @OA\Get(
      *     path="/api/transaction/{transaction}",
      *     summary="Transaction view",
-     *     description="Specific transaction view from id,
+     *     description="Specific transaction view from id",
      *     operationId="transaction.view",
      *     tags={"Transaction"},
      * 
@@ -24,7 +24,9 @@ class TransactionController extends Controller
      *        description="Transaction identification", name="transaction", in="path", required=true, @OA\Schema(type="integer")
      *     ),
      * 
-     *     @OA\Response(response="200", description="Returns transaction resource")
+     *     @OA\Response(response="200", description="Returns transaction resource"),
+     * 
+     *     @OA\Response(response="404", description="Transaction not found response")
      * )
      */
     public function view(
