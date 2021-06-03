@@ -27,8 +27,7 @@ class ViewTransactionRequest extends BaseFormRequest
             'transaction' => [
                 'bail',
                 'integer',
-                'required',
-                'exists:transactions,id'
+                'required'
             ]
         ];
     }
