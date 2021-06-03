@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\Transaction\NotFoundTransactionException;
 use App\Http\Requests\Transaction\CreateTransactionRequest;
-use App\Http\Requests\Transaction\ShowTransactionRequest;
+use App\Http\Requests\Transaction\ViewTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Services\Transaction\Transfer\CreateTransferServiceInterface;
@@ -12,8 +12,23 @@ use App\Services\Transaction\Transfer\CreateTransferServiceInterface;
 class TransactionController extends Controller
 {
 
-    public function show(
-        ShowTransactionRequest $request,
+    /**     
+     * @OA\Get(
+     *     path="/api/transaction/{transaction}",
+     *     summary="Transaction view",
+     *     description="Specific transaction view from id,
+     *     operationId="transaction.view",
+     *     tags={"Transaction"},
+     * 
+     *     @OA\Parameter(
+     *        description="Transaction identification", name="transaction", in="path", required=true, @OA\Schema(type="integer")
+     *     ),
+     * 
+     *     @OA\Response(response="200", description="Returns transaction resource")
+     * )
+     */
+    public function view(
+        ViewTransactionRequest $request,
         TransactionRepositoryInterface $transactionRepo
     ) {
         $transaction = $transactionRepo->findById( $request->route('transaction') );

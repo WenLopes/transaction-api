@@ -1,0 +1,42 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Transaction API",
+        "description": "API for transaction control between users",
+        "contact": {
+            "email": "wendel.lopes777@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/transaction/{transaction}": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Transaction view",
+                "description": "Exibição de OS específica",
+                "operationId": "transaction.view",
+                "parameters": [
+                    {
+                        "name": "transaction",
+                        "in": "path",
+                        "description": "Transaction identification",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns transaction resource"
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
