@@ -44,7 +44,7 @@ git clone https://github.com/WenLopes/transaction-api
 
 
 ### 2. Configure as variáveis de ambiente do DOCKER
-*Na pasta Docker, crie o arquivo .env utilizando o .env.example como base. Modifique o valor das variáveis de acordo com a sua preferência.*
+Na pasta Docker, crie o arquivo .env utilizando o .env.example como base. Modifique o valor das variáveis de acordo com a sua preferência.
 
 ```bash
 cp .env_example .env
@@ -60,13 +60,13 @@ docker-compose up --build
 
 
 ### 4. Instalando as dependências e configurando a API
-*4.1 Instale as dependências do Laravel executando o comando*
+4.1 Instale as dependências do Laravel executando o comando
 ```bash
 docker exec php_transaction composer install
 ```
 
 
-*4.2 Corriga as permissões dos diretórios, executando os comandos abaixo no diretório **api**:*
+4.2 Corriga as permissões dos diretórios, executando os comandos abaixo no diretório **api**:
 
 ```bash
 sudo chgrp -R www-data storage bootstrap/cache
@@ -78,7 +78,7 @@ sudo chmod -R ug+rwx storage bootstrap/cache
 ```
 
 
-*4.3 Crie o arquivo .env do diretório **api**, utilizando o .env.example como base:*
+4.3 Crie o arquivo .env do diretório **api**, utilizando o .env.example como base:
 
 ```bash
 cp .env_example .env
@@ -87,13 +87,13 @@ cp .env_example .env
 
 ***Obs:** Certifique-se de informar as portas definidas no .env do docker, nas variáveis de conexão com o banco de dados (DB_HOST, DB_PORT, etc...) e na variável **APP_URL** (porta definida no container NGINX)*
 
-*4.4 Gere a chave do projeto executando o comando na **raiz do projeto**:*
+4.4 Gere a chave do projeto executando o comando na **raiz do projeto**:
 
 ```bash
 docker exec php_transaction php artisan key:generate
 ```
 
-*4.5 Rode as migrations e Seeders executando o comando na **raiz do projeto**:*
+4.5 Rode as migrations e Seeders executando o comando na **raiz do projeto**:
 
 ```bash
 docker exec php_transaction php artisan migrate:refresh --seed
@@ -136,17 +136,18 @@ As notificações também possuem status para representar seu estado atual, send
 
 ### Processamento de fila
 
-Para processamento da fila, é necessário executar o comando responsável por isso do Laravel. Para isso, execute o comando e o mantenha no console
+Para processamento da fila, é necessário executar o comando responsável por isso do Laravel e mante-lo ativo no terminal. Para isso, execute os comandos
 
 ```bash
-docker exec php_transaction php artisan queue:work
+docker exec -it php_transaction /bin/bash
 ```
+
+```bash
+php artisan queue:work
 
 ### Payload
 
-No diretório **docs**, contém arquivos para importação nos API clients [Insomnia](https://github.com/WenLopes/transaction-api/blob/master/docs/Insomnia%20-%20Transaction%20API) e [Postman](https://github.com/WenLopes/transaction-api/blob/master/docs/Postman%20-%20Transaction%20API.json). Faça o Download e importe em seu client de preferência
-
-Ou se preferir, segue abaixo os Payload's para consumo das rotas criadas
+No diretório **docs**, contém arquivos para importação nos API clients [Insomnia](https://github.com/WenLopes/transaction-api/blob/master/docs/Insomnia%20-%20Transaction%20API) e [Postman](https://github.com/WenLopes/transaction-api/blob/master/docs/Postman%20-%20Transaction%20API.json). Faça o Download dos arquivos e importe em seu client de preferência. Se preferir, segue abaixo os Payload's para consumo das rotas criadas.
 
 **GET:** ```http://localhost:{NGINX_PORT}/api/transaction/{transactionId}```
 
@@ -155,8 +156,8 @@ Ou se preferir, segue abaixo os Payload's para consumo das rotas criadas
 ```json
 {
     "value" : 100.00,
-    "payer" : 4,
-    "payee" : 15
+    "payer" : 1,
+    "payee" : 2
 }
 ```
 
@@ -174,6 +175,5 @@ docker exec php_transaction vendor/bin/phpunit
 * [Docker](https://www.docker.com/)
 * [Clean code](https://github.com/jupeter/clean-code-php)
 * [L5 Swagger](https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&-Configuration)
-* [Laravel permissions security]() 
 * [Insomnia API CLient](https://insomnia.rest/download)
 * [Postman API CLient](https://www.postman.com/)
