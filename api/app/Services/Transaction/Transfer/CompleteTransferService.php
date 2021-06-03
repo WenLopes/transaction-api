@@ -33,7 +33,7 @@ final class CompleteTransferService implements CompleteTransferServiceInterface 
             DB::beginTransaction();
 
             if( $transaction->alreadyProcessed() ) {
-                throw new Exception("The transaction has already been processed previously");
+                return false;
             }
 
             if( ! $this->transactionRepo->setAsSuccess($transaction->id) ){
