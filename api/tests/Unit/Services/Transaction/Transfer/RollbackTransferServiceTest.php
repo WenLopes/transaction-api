@@ -51,9 +51,23 @@ class RollbackTransferServiceTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function test_should_not_rollback_transfer_if_transaction_already_processed()
+    {
+        $transactionMock = $this->createMock(Transaction::class);
+        $transactionMock->method('alreadyProcessed')->willReturn(true);
+        $rollbackTransferService = new RollbackTransferService(
+            $this->mockTransactionRepo,
+            $this->mockUserRepo
+        );
+        $this->assertFalse($rollbackTransferService->handleRollbackTransfer($transactionMock));
+    }
+
+    /**
     * @test
     */
-    public function test_should_not_finish_when_transaction_status_fail_to_change_to_error()
+    public function test_should_not_rollback_transfer_when_transaction_status_fail_to_change_to_error()
     {
         $this->expectException(RollbackTransferException::class);
         $this->expectExceptionMessage("Error setting transaction status as failed");
@@ -71,7 +85,7 @@ class RollbackTransferServiceTest extends TestCase
    /**
     * @test
     */
-    public function test_should_not_finish_when_transaction_value_is_not_added_to_the_payer_balance()
+    public function test_should_not_rollback_transfer_when_transaction_value_is_not_added_to_the_payer_balance()
     {
         $this->expectException(RollbackTransferException::class);
         $this->expectExceptionMessage("Error adding value to payer balance");
