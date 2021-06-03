@@ -26,12 +26,12 @@ if ( ! function_exists('getProperty'))
  * Returns formatted decimal value for the BRL pattern
  * 
  * @param float $value
- * @param int $num_after_comma
+ * @param int $numAfterComma
  * @return string
  */
 if (! function_exists('format_brl')) {
-    function format_brl(float $value, int $num_after_comma = 2) : string
+    function format_brl(float $value, int $numAfterComma = 2) : string
     {
-        return number_format($value, $num_after_comma, ',', '.');
+        return number_format($value, $numAfterComma, ',', '.');
     }
 }
